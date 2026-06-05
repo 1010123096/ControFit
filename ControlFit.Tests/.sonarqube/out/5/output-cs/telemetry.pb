@@ -1,0 +1,1 @@
+zRmC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Core\ControlFit.Domain.csprojòCSharp12

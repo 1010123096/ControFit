@@ -1,0 +1,19 @@
+•
+ôC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\obj\Debug\net8.0\ControlFit.Infrastructure.AssemblyInfo.csutf-8™
+ûC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.csutf-8ß
+õC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\obj\Debug\net8.0\ControlFit.Infrastructure.GlobalUsings.g.csutf-8Ç
+yC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Repository\TokenService.csutf-8á
+~C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Repository\MiembroRepository.csutf-8ä
+ÄC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Repository\MembresiaRepository.csutf-8à
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Repository\GimnasioRepository.csutf-8ã
+ÅC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Repository\AsistenciaRepository.csutf-8î
+äC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Repository\AsignacionMembresiaRepository.csutf-8é
+ÑC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Repository\AdministradorRepository.csutf-8Ñ
+{C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Persistencia\AppDbContext.csutf-8í
+ÜC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Migrations\AppDbContextModelSnapshot.csutf-8≠
+°C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Migrations\20260604004301_AddGimnasioIdToAdministrador.Designer.csutf-8¢
+òC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Migrations\20260604004301_AddGimnasioIdToAdministrador.csutf-8§
+òC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Migrations\20260603160615_creacionAsignaiones.Designer.csutf-8ô
+èC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Migrations\20260603160615_creacionAsignaiones.csutf-8ï
+âC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Migrations\20260515140921_Init.Designer.csutf-8ä
+ÄC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Migrations\20260515140921_Init.csutf-8

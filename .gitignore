@@ -1,0 +1,29 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+*.tmp
+*.vs/
+
+# Coverage reports
+CoverageReport/
+CoverageReport2/
+CoverageFinal/
+coverage.opencover.xml
+cobertura.xml
+
+# SonarQube scanner output
+.sonarqube/out/
+
+# NuGet
+packages/
+*.nupkg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*~

@@ -1,0 +1,15 @@
+﻿C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Migrations\20260515140921_Init.cs
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Migrations\20260515140921_Init.Designer.cs
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Migrations\20260603160615_creacionAsignaiones.cs
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Migrations\20260603160615_creacionAsignaiones.Designer.cs
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Migrations\20260604004301_AddGimnasioIdToAdministrador.cs
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Migrations\20260604004301_AddGimnasioIdToAdministrador.Designer.cs
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Migrations\AppDbContextModelSnapshot.cs
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Persistencia\AppDbContext.cs
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Repository\AdministradorRepository.cs
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Repository\AsignacionMembresiaRepository.cs
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Repository\AsistenciaRepository.cs
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Repository\GimnasioRepository.cs
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Repository\MembresiaRepository.cs
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Repository\MiembroRepository.cs
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\Repository\TokenService.cs

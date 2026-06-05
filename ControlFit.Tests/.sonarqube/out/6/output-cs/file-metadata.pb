@@ -1,0 +1,20 @@
+ü
+ìC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\obj\Debug\net8.0\ControlFit.Application.AssemblyInfo.csutf-8ß
+õC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.csutf-8°
+ïC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\obj\Debug\net8.0\ControlFit.Application.GlobalUsings.g.csutf-8Ñ
+{C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\Servicios\UserContextService.csutf-8Ö
+|C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\Servicios\IUserContextService.csutf-8
+vC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\Servicios\ITokenService.csutf-8v
+mC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\DTO\MiembroDTO.csutf-8x
+oC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\DTO\MembresiaDTO.csutf-8w
+nC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\DTO\GimnasioDTO.csutf-8y
+pC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\DTO\AsistenciaDTO.csutf-8á
+~C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\DTO\AsignacionMembresiaCrearDTO.csutf-8|
+sC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\DTO\AdministradorDTO.csutf-8ä
+ÄC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\CasosUso\Ingreso\RegistrarIngreso.csutf-8å
+ÇC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\CasosUso\CRUDMiembro\MiembroService.csutf-8ê
+ÜC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\CasosUso\CRUDMembresia\MembresiaService.csutf-8é
+ÑC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\CasosUso\CRUDGimnasio\GimnasioService.csutf-8õ
+ëC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\CasosUso\CRUDAsignacion\AsignacionMembresiaService.csutf-8ç
+ÉC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\CasosUso\Auth\RegistrarAdministrador.csutf-8à
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\CasosUso\Auth\LoginAdministrador.csutf-8

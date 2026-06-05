@@ -1,0 +1,36 @@
+ì
+áC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\obj\Debug\net8.0\ControlFit.Tests.AssemblyInfo.csutf-8ï
+âC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\obj\Debug\net8.0\ControlFit.Tests.GlobalUsings.g.csutf-8°
+ïC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.csutf-8}
+rC:\Users\alber\.nuget\packages\microsoft.net.test.sdk\17.8.0\build\netcoreapp3.1\Microsoft.NET.Test.Sdk.Program.csutf-8k
+bC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\UnitTest1.csutf-8Ç
+yC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Infrastructure\TokenServiceTests.csutf-8á
+~C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Infrastructure\MiembroRepositoryTests.csutf-8ä
+ÄC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Infrastructure\MembresiaRepositoryTests.csutf-8à
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Infrastructure\GimnasioRepositoryTests.csutf-8ã
+ÅC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Infrastructure\AsistenciaRepositoryTests.csutf-8î
+äC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Infrastructure\AsignacionMembresiaRepositoryTests.csutf-8é
+ÑC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Infrastructure\AdministradorRepositoryTests.csutf-8u
+lC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Domain\MiembroTests.csutf-8w
+nC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Domain\MembresiaTests.csutf-8v
+mC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Domain\GimnasioTests.csutf-8x
+oC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Domain\AsistenciaTests.csutf-8Å
+xC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Domain\AsignacionMembresiaTests.csutf-8{
+rC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Domain\AdministradorTests.csutf-8Ö
+|C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\UserContextServiceTests.csutf-8É
+zC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\RegistrarIngresoTests.csutf-8ä
+ÄC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\RegistrarAdministradorTests.csutf-8Å
+xC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\MiembroServiceTests.csutf-8É
+zC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\MembresiaServiceTests.csutf-8Ö
+|C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\LoginAdministradorTests.csutf-8Ç
+yC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\GimnasioServiceTests.csutf-8Ä
+wC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\AsistenciaDTOTests.csutf-8é
+ÑC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\AsignacionMembresiaServiceTests.csutf-8y
+pC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\SeedControllerTests.csutf-8|
+sC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\MiembroControllerTests.csutf-8~
+uC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\MembresiaControllerTests.csutf-8~
+uC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\HistorialControllerTests.csutf-8}
+tC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\GimnasioControllerTests.csutf-8Ç
+yC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\AutenticacionControllerTests.csutf-8
+vC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\AsistenciaControllerTests.csutf-8à
+C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\AsignacionMembresiaControllerTests.csutf-8

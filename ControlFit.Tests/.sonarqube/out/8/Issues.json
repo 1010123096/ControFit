@@ -1,0 +1,538 @@
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "tool": {
+        "name": "Compilador de Microsoft (R) Visual C#",
+        "version": "4.14.0.0",
+        "fileVersion": "4.14.0-3.25218.8 (d7bde97e)",
+        "semanticVersion": "4.14.0",
+        "language": "es-MX"
+      },
+      "results": [
+        {
+          "ruleId": "CS8604",
+          "level": "warning",
+          "message": "Posible argumento de referencia nulo para el parámetro \"s\" en \"byte[] Encoding.GetBytes(string s)\".",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Program.cs",
+                "region": {
+                  "startLine": 45,
+                  "startColumn": 40,
+                  "endLine": 45,
+                  "endColumn": 72
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S1192",
+          "level": "warning",
+          "message": "Define a constant instead of using this literal '123456' 4 times.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/SeedController.cs",
+                "region": {
+                  "startLine": 36,
+                  "startColumn": 34,
+                  "endLine": 36,
+                  "endColumn": 42
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/SeedController.cs",
+                "region": {
+                  "startLine": 45,
+                  "startColumn": 34,
+                  "endLine": 45,
+                  "endColumn": 42
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/SeedController.cs",
+                "region": {
+                  "startLine": 53,
+                  "startColumn": 86,
+                  "endLine": 53,
+                  "endColumn": 94
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/SeedController.cs",
+                "region": {
+                  "startLine": 54,
+                  "startColumn": 79,
+                  "endLine": 54,
+                  "endColumn": 87
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "0": null,
+              "1": null,
+              "2": null
+            }
+          }
+        },
+        {
+          "ruleId": "S1481",
+          "level": "warning",
+          "message": "Remove the unused local variable 'miembro'.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/MiembroController.cs",
+                "region": {
+                  "startLine": 25,
+                  "startColumn": 21,
+                  "endLine": 25,
+                  "endColumn": 28
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S6961",
+          "level": "warning",
+          "message": "Inherit from ControllerBase instead of Controller.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/AsignacionMembresiaController.cs",
+                "region": {
+                  "startLine": 9,
+                  "startColumn": 50,
+                  "endLine": 9,
+                  "endColumn": 60
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S6961",
+          "level": "warning",
+          "message": "Inherit from ControllerBase instead of Controller.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/AutenticacionController.cs",
+                "region": {
+                  "startLine": 12,
+                  "startColumn": 44,
+                  "endLine": 12,
+                  "endColumn": 54
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S1192",
+          "level": "warning",
+          "message": "Define a constant instead of using this literal 'ID de miembro inválido' 4 times.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/HistorialController.cs",
+                "region": {
+                  "startLine": 54,
+                  "startColumn": 53,
+                  "endLine": 54,
+                  "endColumn": 77
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/HistorialController.cs",
+                "region": {
+                  "startLine": 118,
+                  "startColumn": 53,
+                  "endLine": 118,
+                  "endColumn": 77
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/HistorialController.cs",
+                "region": {
+                  "startLine": 175,
+                  "startColumn": 53,
+                  "endLine": 175,
+                  "endColumn": 77
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/HistorialController.cs",
+                "region": {
+                  "startLine": 257,
+                  "startColumn": 53,
+                  "endLine": 257,
+                  "endColumn": 77
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "0": null,
+              "1": null,
+              "2": null
+            }
+          }
+        },
+        {
+          "ruleId": "S1192",
+          "level": "warning",
+          "message": "Define a constant instead of using this literal 'Miembro no encontrado' 4 times.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/HistorialController.cs",
+                "region": {
+                  "startLine": 69,
+                  "startColumn": 55,
+                  "endLine": 69,
+                  "endColumn": 78
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/HistorialController.cs",
+                "region": {
+                  "startLine": 133,
+                  "startColumn": 55,
+                  "endLine": 133,
+                  "endColumn": 78
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/HistorialController.cs",
+                "region": {
+                  "startLine": 190,
+                  "startColumn": 55,
+                  "endLine": 190,
+                  "endColumn": 78
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/HistorialController.cs",
+                "region": {
+                  "startLine": 267,
+                  "startColumn": 51,
+                  "endLine": 267,
+                  "endColumn": 74
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "0": null,
+              "1": null,
+              "2": null
+            }
+          }
+        },
+        {
+          "ruleId": "S6961",
+          "level": "warning",
+          "message": "Inherit from ControllerBase instead of Controller.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/GimnasioController.cs",
+                "region": {
+                  "startLine": 12,
+                  "startColumn": 39,
+                  "endLine": 12,
+                  "endColumn": 49
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S6961",
+          "level": "warning",
+          "message": "Inherit from ControllerBase instead of Controller.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/MiembroController.cs",
+                "region": {
+                  "startLine": 12,
+                  "startColumn": 38,
+                  "endLine": 12,
+                  "endColumn": 48
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S3358",
+          "level": "warning",
+          "message": "Extract this nested ternary operation into an independent statement.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/HistorialController.cs",
+                "region": {
+                  "startLine": 305,
+                  "startColumn": 45,
+                  "endLine": 307,
+                  "endColumn": 36
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "S6960",
+          "level": "warning",
+          "message": "This controller has multiple responsibilities and could be split into 2 smaller controllers.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/AsistenciaController.cs",
+                "region": {
+                  "startLine": 21,
+                  "startColumn": 18,
+                  "endLine": 21,
+                  "endColumn": 38
+                }
+              }
+            }
+          ],
+          "relatedLocations": [
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/AsistenciaController.cs",
+                "region": {
+                  "startLine": 142,
+                  "startColumn": 41,
+                  "endLine": 142,
+                  "endColumn": 59
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/AsistenciaController.cs",
+                "region": {
+                  "startLine": 72,
+                  "startColumn": 41,
+                  "endLine": 72,
+                  "endColumn": 59
+                }
+              }
+            },
+            {
+              "physicalLocation": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Controllers/AsistenciaController.cs",
+                "region": {
+                  "startLine": 45,
+                  "startColumn": 41,
+                  "endLine": 45,
+                  "endColumn": 57
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "0": "May belong to responsibility #1.",
+              "1": "May belong to responsibility #1.",
+              "2": "May belong to responsibility #2."
+            }
+          }
+        },
+        {
+          "ruleId": "S6966",
+          "level": "warning",
+          "message": "Await RunAsync instead.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///C:/Users/alber/OneDrive/Escritorio/Proyectos%20pagos/GYMSOF/ControlFit/ControlFit.Api/Program.cs",
+                "region": {
+                  "startLine": 96,
+                  "startColumn": 1,
+                  "endLine": 96,
+                  "endColumn": 10
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        }
+      ],
+      "rules": {
+        "CS8604": {
+          "id": "CS8604",
+          "shortDescription": "Posible argumento de referencia nulo",
+          "defaultLevel": "warning",
+          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS8604)",
+          "properties": {
+            "category": "Compiler",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Compiler",
+              "Telemetry"
+            ]
+          }
+        },
+        "S1192": {
+          "id": "S1192",
+          "shortDescription": "String literals should not be duplicated",
+          "fullDescription": "Duplicated string literals make the process of refactoring complex and error-prone, as any change would need to be propagated on all occurrences.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Minor Code Smell",
+            "isEnabledByDefault": false,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S1481": {
+          "id": "S1481",
+          "shortDescription": "Unused local variables should be removed",
+          "fullDescription": "An unused local variable is a variable that has been declared but is not used anywhere in the block of code where it is defined. It is dead code, contributing to unnecessary complexity and leading to confusion when reading the code. Therefore, it should be removed from your code to maintain clarity and efficiency.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Minor Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "TestSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S3358": {
+          "id": "S3358",
+          "shortDescription": "Ternary operators should not be nested",
+          "fullDescription": "Nested ternaries are hard to read and can make the order of operations complex to understand.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Major Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "TestSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S6960": {
+          "id": "S6960",
+          "shortDescription": "Controllers should not have mixed responsibilities",
+          "fullDescription": "ASP.NET controllers should not have mixed responsibilities. Following the Single Responsibility Principle (SRP), they should be kept lean and focused on a single, separate concern. In short, they should have a single reason to change.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Major Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S6961": {
+          "id": "S6961",
+          "shortDescription": "API Controllers should derive from ControllerBase instead of Controller",
+          "fullDescription": "In ASP.NET Core, controllers usually inherit either from ControllerBase or Controller. If a controller does not use any View-specific functionality, it is recommended to inherit from ControllerBase.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Major Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "SonarWay"
+            ]
+          }
+        },
+        "S6966": {
+          "id": "S6966",
+          "shortDescription": "Awaitable method should be used",
+          "fullDescription": "In an async method, any blocking operations should be avoided.",
+          "defaultLevel": "warning",
+          "properties": {
+            "category": "Major Code Smell",
+            "isEnabledByDefault": true,
+            "tags": [
+              "C#",
+              "MainSourceScope",
+              "TestSourceScope",
+              "SonarWay"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

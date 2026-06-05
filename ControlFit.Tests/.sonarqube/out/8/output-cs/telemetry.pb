@@ -1,0 +1,1 @@
+vRiC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\ControlFit.Api.csprojòCSharp12

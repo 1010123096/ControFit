@@ -1,0 +1,1 @@
+ŒRC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Infrastructure\ControlFit.Infrastructure.csprojòCSharp12

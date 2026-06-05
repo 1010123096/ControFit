@@ -1,0 +1,1 @@
+†RyC:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\ControlFit.Application.csprojòCSharp12
