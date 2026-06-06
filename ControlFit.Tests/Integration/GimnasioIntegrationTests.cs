@@ -17,7 +17,7 @@ namespace ControlFit.Tests.Integration
             var nombre = $"New Gym {Guid.NewGuid():N}";
             var dto = new GimnasioCrearDTO(nombre, "Some Address");
 
-            var response = await Client.PostAsJsonAsync("api/Gym/Crear", dto);
+            var response = await Client.PostAsJsonAsync("api/gimnasios/Registro", dto);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var body = await response.Content.ReadAsStringAsync();
@@ -45,10 +45,10 @@ namespace ControlFit.Tests.Integration
         {
             var name = $"Duplicate Gym {Guid.NewGuid():N}";
             var dto1 = new GimnasioCrearDTO(name, "Address 1");
-            await Client.PostAsJsonAsync("api/Gym/Crear", dto1);
+            await Client.PostAsJsonAsync("api/gimnasios/Registro", dto1);
 
             var dto2 = new GimnasioCrearDTO(name, "Address 2");
-            var response = await Client.PostAsJsonAsync("api/Gym/Crear", dto2);
+            var response = await Client.PostAsJsonAsync("api/gimnasios/Registro", dto2);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             var error = await GetResponseError(response);
@@ -60,7 +60,7 @@ namespace ControlFit.Tests.Integration
         {
             var dto = new GimnasioCrearDTO("", "Some Address");
 
-            var response = await Client.PostAsJsonAsync("api/Gym/Crear", dto);
+            var response = await Client.PostAsJsonAsync("api/gimnasios/Registro", dto);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -68,7 +68,7 @@ namespace ControlFit.Tests.Integration
         [Fact]
         public async Task ObtenerTodos_ReturnsGyms()
         {
-            var response = await Client.GetAsync("api/Gym/ObtenerTodos");
+            var response = await Client.GetAsync("api/gimnasios/obtenerTodos");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
@@ -76,7 +76,7 @@ namespace ControlFit.Tests.Integration
         [Fact]
         public async Task ObtenerPorId_ValidId_ReturnsOk()
         {
-            var response = await Client.GetAsync($"api/Gym/ObtenerPorId?id={GimnasioId}");
+            var response = await Client.GetAsync($"api/gimnasios/obtenerPorId?id={GimnasioId}");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
@@ -84,7 +84,7 @@ namespace ControlFit.Tests.Integration
         [Fact]
         public async Task ObtenerPorId_InvalidId_ReturnsBadRequest()
         {
-            var response = await Client.GetAsync("api/Gym/ObtenerPorId?id=9999");
+            var response = await Client.GetAsync("api/gimnasios/obtenerPorId?id=9999");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -101,7 +101,7 @@ namespace ControlFit.Tests.Integration
                 Estado = true
             };
 
-            var response = await Client.PutAsJsonAsync("api/Gym/Actualizar", dto);
+            var response = await Client.PutAsJsonAsync("api/gimnasios/actualizar", dto);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             using var db = CreateDbContext();
@@ -123,7 +123,7 @@ namespace ControlFit.Tests.Integration
                 Estado = true
             };
 
-            var response = await Client.PutAsJsonAsync("api/Gym/Actualizar", dto);
+            var response = await Client.PutAsJsonAsync("api/gimnasios/actualizar", dto);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -132,13 +132,13 @@ namespace ControlFit.Tests.Integration
         public async Task Eliminar_ValidId_RemovesFromDb()
         {
             var createResponse = await Client.PostAsJsonAsync(
-                "api/Gym/Crear",
+                "api/gimnasios/Registro",
                 new GimnasioCrearDTO($"Gym to Delete {Guid.NewGuid():N}", "Address"));
             var content = await createResponse.Content.ReadAsStringAsync();
             var doc = JsonDocument.Parse(content);
             var newId = doc.RootElement.GetProperty("data").GetProperty("id").GetInt32();
 
-            var response = await Client.DeleteAsync($"api/Gym/Eliminar?id={newId}");
+            var response = await Client.DeleteAsync($"api/gimnasios/eliminar?id={newId}");
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             using var db = CreateDbContext();
@@ -149,7 +149,7 @@ namespace ControlFit.Tests.Integration
         [Fact]
         public async Task Eliminar_InvalidId_ReturnsBadRequest()
         {
-            var response = await Client.DeleteAsync("api/Gym/Eliminar?id=9999");
+            var response = await Client.DeleteAsync("api/gimnasios/eliminar?id=9999");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
