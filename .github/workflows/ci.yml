@@ -168,27 +168,25 @@ jobs:
         run: dotnet stryker --config-file "stryker-config-api.json"
         continue-on-error: true
 
-      - name: Generate mutation index
+      - name: Consolidate mutation reports
         if: always()
         run: |
-          mkdir -p StrykerOutput
-          cat > StrykerOutput/index.html << 'HTML'
-          <!DOCTYPE html>
-          <meta charset="UTF-8">
-          <meta http-equiv="refresh" content="0;url=domain/index.html">
-          <title>Mutation Reports</title>
-          <p><a href="domain/index.html">Domain</a></p>
-          <p><a href="application/index.html">Application</a></p>
-          <p><a href="infrastructure/index.html">Infrastructure</a></p>
-          <p><a href="api/index.html">API</a></p>
-          HTML
+          mkdir -p StrykerOutput consolidated-mutation
+          echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Mutation Reports</title></head><body><h1>Mutation Reports</h1><ul>' > consolidated-mutation/index.html
+          for d in $(find . -path '*/StrykerOutput/*' -name 'index.html' -type f 2>/dev/null | sed 's|/index\.html$||'); do
+            name=$(basename "$d")
+            mkdir -p "consolidated-mutation/$name"
+            cp -r "$d/"* "consolidated-mutation/$name/" 2>/dev/null || true
+            echo "<li><a href=\"$name/index.html\">$name</a></li>" >> consolidated-mutation/index.html
+          done
+          echo '</ul></body></html>' >> consolidated-mutation/index.html
 
       - name: Upload mutation reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: mutation-reports
-          path: StrykerOutput/
+          path: consolidated-mutation/
 
   performance:
     name: Performance Tests (k6)

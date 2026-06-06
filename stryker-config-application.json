@@ -9,7 +9,6 @@
       "low": 60
     },
     "reporters": ["html", "json", "cleartext"],
-    "output-path": "StrykerOutput/application",
     "test-case-filter": "FullyQualifiedName~Application",
     "verbosity": "info",
     "concurrency": 4

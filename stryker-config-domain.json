@@ -9,7 +9,6 @@
       "low": 70
     },
     "reporters": ["html", "json", "cleartext"],
-    "output-path": "StrykerOutput/domain",
     "test-case-filter": "FullyQualifiedName~Domain",
     "verbosity": "info",
     "concurrency": 4
