@@ -63,9 +63,10 @@ jobs:
         run: |
           COVERAGE_FILE=$(find . -path '*/TestResults/*/coverage.cobertura.xml' | head -1)
           if [ -f "$COVERAGE_FILE" ]; then
-            python3 -c "
+            export COVERAGE_FILE
+            python3 << 'PYEOF'
 import xml.etree.ElementTree as ET, os, sys
-tree = ET.parse('$COVERAGE_FILE')
+tree = ET.parse(os.environ['COVERAGE_FILE'])
 root = tree.getroot()
 total, covered = 0, 0
 for cls in root.iter('class'):
@@ -83,7 +84,7 @@ with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
 if pct < 75:
     print('::error::Coverage {:.1f}% is below 75% threshold'.format(pct))
     sys.exit(1)
-"
+PYEOF
           fi
 
       - name: Upload coverage report
