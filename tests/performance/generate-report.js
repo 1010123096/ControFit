@@ -35,42 +35,33 @@ for (const file of summaryFiles) {
     }
   }
 
-  // Recursively collect checks from nested groups
+  // Collect checks from k6 summary export
+  // Try nested groups first, then fall back to aggregate metrics
   function collectChecks(group, prefix) {
     if (!group) return;
     const groupName = prefix ? `${prefix} / ${group.name}` : group.name;
     if (Array.isArray(group.checks)) {
       for (const check of group.checks) {
         const fullName = groupName ? `${groupName}: ${check.name}` : check.name;
-        checks.push({
-          name: fullName,
-          passes: check.passes,
-          fails: check.fails
-        });
+        checks.push({ name: fullName, passes: check.passes, fails: check.fails });
         allChecks.push({ test: name, name: fullName, passes: check.passes, fails: check.fails });
       }
     }
     if (Array.isArray(group.groups)) {
-      for (const g of group.groups) {
-        collectChecks(g, groupName);
-      }
+      for (const g of group.groups) collectChecks(g, groupName);
     }
   }
   collectChecks(data.root_group, '');
 
-  // Fallback: if no checks found, try to parse from metrics
+  // Fallback: read aggregate check metrics
   if (checks.length === 0 && data.metrics) {
-    for (const [key, val] of Object.entries(data.metrics)) {
-      if (key.startsWith('check_') && val.values) {
-        const passRate = val.values['rate'] !== undefined ? val.values['rate'] : (val.values['passes'] / (val.values['passes'] + val.values['fails']));
-        const passes = val.values['passes'] || 0;
-        const fails = val.values['fails'] || 0;
-        checks.push({
-          name: key.replace(/^check_/, '').replace(/_/g, ' '),
-          passes: passes,
-          fails: fails
-        });
-        allChecks.push({ test: name, name: key.replace(/^check_/, '').replace(/_/g, ' '), passes, fails });
+    const checkMetric = data.metrics.checks;
+    if (checkMetric && checkMetric.values) {
+      const passes = checkMetric.values.passes || 0;
+      const fails = checkMetric.values.fails || 0;
+      if (passes > 0 || fails > 0) {
+        checks.push({ name: 'All checks', passes, fails });
+        allChecks.push({ test: name, name: 'All checks', passes, fails });
       }
     }
   }
