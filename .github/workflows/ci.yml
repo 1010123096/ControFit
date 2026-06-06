@@ -222,8 +222,11 @@ jobs:
         run: |
           echo "Waiting for API to start..."
           for i in $(seq 1 30); do
-            code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5219/api/auth/login || echo "000")
-            if [ "$code" = "200" ] || [ "$code" = "401" ]; then
+            code=$(curl -s -o /dev/null -w "%{http_code}" \
+              -X POST http://localhost:5219/api/auth/login \
+              -H "Content-Type: application/json" \
+              -d '{}' 2>/dev/null || echo "000")
+            if [ "${code:0:1}" = "2" ] || [ "${code:0:1}" = "4" ]; then
               echo "API ready (HTTP $code)"
               break
             fi
@@ -234,7 +237,13 @@ jobs:
       - name: Seed database
         run: |
           echo "Seeding database..."
-          curl -s -X POST http://localhost:5219/api/seed -o /dev/null -w "%{http_code}" || echo "Seed may have partially failed"
+          code=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://localhost:5219/api/seed)
+          if [ "$code" = "200" ]; then
+            echo "Seed OK (HTTP $code)"
+          else
+            echo "Seed FAILED (HTTP $code)"
+            exit 1
+          fi
 
       - name: Smoke test
         continue-on-error: true
