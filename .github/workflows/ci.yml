@@ -170,19 +170,6 @@ jobs:
         run: dotnet stryker --config-file "stryker-config-api.json"
         continue-on-error: true
 
-      - name: Flatten mutation reports
-        if: always()
-        run: |
-          mkdir -p mutation-flat
-          for dir in StrykerOutput/*/; do
-            [ -d "$dir" ] || continue
-            name=$(basename "$dir")
-            mkdir -p "mutation-flat/$name"
-            cp -r "$dir"* "mutation-flat/$name/" 2>/dev/null || true
-          done
-          rm -rf StrykerOutput
-          mv mutation-flat StrykerOutput
-
       - name: Upload mutation reports
         uses: actions/upload-artifact@v4
         if: always()
@@ -325,8 +312,12 @@ jobs:
 
       - name: Generate index.html
         run: |
+          echo "=== Mutation debug ==="
+          ls -la reports/mutation/ 2>/dev/null || echo "reports/mutation does not exist"
+          find reports/mutation -name 'index.html' -type f 2>/dev/null || echo "No index.html found"
+          echo "=== End debug ==="
           MUTATION_CARD='<div class="card"><h2>Mutation Tests</h2><p>No mutation report available</p><span class="status missing">N/A</span></div>'
-          MUTATION_FILE=$(find reports/mutation -name 'index.html' 2>/dev/null | head -1)
+          MUTATION_FILE=$(find reports/mutation -name 'index.html' -type f 2>/dev/null | head -1)
           if [ -n "$MUTATION_FILE" ]; then
             MUTATION_REL=${MUTATION_FILE#reports/}
             MUTATION_CARD='<a class="card" href="'"$MUTATION_REL"'" target="_blank"><h2>Mutation Tests</h2><p>Stryker.NET mutation score report</p><span class="status found">View</span></a>'
