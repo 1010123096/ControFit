@@ -153,31 +153,33 @@ jobs:
           dotnet build ControlFit.Tests/ControlFit.Tests.csproj --configuration Release --no-restore
 
       - name: Mutation - Domain
-        run: dotnet stryker --config-file "stryker-config-domain.json" -o "StrykerOutput/domain"
+        run: dotnet stryker --config-file "stryker-config-domain.json"
         continue-on-error: true
 
       - name: Mutation - Application
-        run: dotnet stryker --config-file "stryker-config-application.json" -o "StrykerOutput/application"
+        run: dotnet stryker --config-file "stryker-config-application.json"
         continue-on-error: true
 
       - name: Mutation - Infrastructure
-        run: dotnet stryker --config-file "stryker-config-infrastructure.json" -o "StrykerOutput/infrastructure"
+        run: dotnet stryker --config-file "stryker-config-infrastructure.json"
         continue-on-error: true
 
       - name: Mutation - API
-        run: dotnet stryker --config-file "stryker-config-api.json" -o "StrykerOutput/api"
+        run: dotnet stryker --config-file "stryker-config-api.json"
         continue-on-error: true
 
-      - name: Generate mutation index
+      - name: Flatten mutation reports
         if: always()
         run: |
-          mkdir -p StrykerOutput
-          cat > StrykerOutput/index.html << 'HTML'
-          <!DOCTYPE html>
-          <meta charset="UTF-8">
-          <meta http-equiv="refresh" content="0;url=domain/index.html">
-          <title>Mutation Reports</title>
-          HTML
+          mkdir -p mutation-flat
+          for dir in StrykerOutput/*/; do
+            [ -d "$dir" ] || continue
+            name=$(basename "$dir")
+            mkdir -p "mutation-flat/$name"
+            cp -r "$dir"* "mutation-flat/$name/" 2>/dev/null || true
+          done
+          rm -rf StrykerOutput
+          mv mutation-flat StrykerOutput
 
       - name: Upload mutation reports
         uses: actions/upload-artifact@v4
@@ -321,7 +323,13 @@ jobs:
 
       - name: Generate index.html
         run: |
-          cat > reports/index.html << 'HTML'
+          MUTATION_CARD='<div class="card"><h2>Mutation Tests</h2><p>No mutation report available</p><span class="status missing">N/A</span></div>'
+          MUTATION_FILE=$(find reports/mutation -name 'index.html' -path '*/StrykerOutput/*' 2>/dev/null | head -1)
+          if [ -n "$MUTATION_FILE" ]; then
+            MUTATION_REL=${MUTATION_FILE#reports/}
+            MUTATION_CARD='<a class="card" href="'"$MUTATION_REL"'" target="_blank"><h2>Mutation Tests</h2><p>Stryker.NET mutation score report</p><span class="status found">View</span></a>'
+          fi
+          cat > reports/index.html << HTML
           <!DOCTYPE html>
           <html lang="en">
           <head>
@@ -357,11 +365,7 @@ jobs:
               <p>HTML report from ReportGenerator</p>
               <span class="status found">View</span>
             </a>
-            <a class="card" href="mutation/index.html" target="_blank">
-              <h2>Mutation Tests</h2>
-              <p>Stryker.NET mutation score report</p>
-              <span class="status found">View</span>
-            </a>
+            $MUTATION_CARD
             <a class="card" href="performance/performance-report.html" target="_blank">
               <h2>Performance (k6)</h2>
               <p>k6 load test HTML report</p>
