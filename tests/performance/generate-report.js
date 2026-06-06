@@ -17,29 +17,45 @@ for (const file of summaryFiles) {
   const data = JSON.parse(raw);
   const testName = path.basename(file, '.json').replace('performance-', '');
 
-  // Extract checks from root_group recursively
+  // Find all checks anywhere in the JSON structure
   const checks = [];
-  function extractChecks(group, prefix) {
-    if (!group) return;
-    if (Array.isArray(group.checks)) {
-      for (const check of group.checks) {
-        checks.push({
-          name: prefix ? `${prefix}: ${check.name}` : check.name,
-          passes: check.passes || 0,
-          fails: check.fails || 0
-        });
+  function findChecks(obj, depth = 0) {
+    if (!obj || typeof obj !== 'object' || depth > 10) return;
+    
+    if (Array.isArray(obj.checks)) {
+      for (const check of obj.checks) {
+        if (check.name) {
+          const checkVals = { ...(typeof check === 'object' && check !== null ? check : {}), ...(check.values || {}) };
+          checks.push({
+            name: check.name,
+            passes: checkVals.passes || 0,
+            fails: checkVals.fails || 0
+          });
+        }
       }
     }
-    if (Array.isArray(group.groups)) {
-      for (const g of group.groups) extractChecks(g, g.name);
+    
+    for (const v of Object.values(obj)) {
+      if (Array.isArray(v)) {
+        for (const item of v) findChecks(item, depth + 1);
+      } else if (typeof v === 'object' && v !== null) {
+        findChecks(v, depth + 1);
+      }
     }
   }
-  extractChecks(data.root_group, '');
+  findChecks(data);
 
-  // Fallback: use aggregate checks metric if no individual checks found
-  if (checks.length === 0 && data.metrics && data.metrics.checks) {
-    const c = data.metrics.checks.values || {};
-    checks.push({ name: 'All checks', passes: c.passes || 0, fails: c.fails || 0 });
+  // Fallback: read aggregate checks from metrics if no individual checks found
+  if (checks.length === 0 && data.metrics) {
+    const checksMetric = data.metrics.checks;
+    if (checksMetric) {
+      const vals = { ...(typeof checksMetric === 'object' && checksMetric !== null ? checksMetric : {}), ...(checksMetric.values || {}) };
+      const passes = vals.passes || vals.count || 0;
+      const fails = vals.fails || 0;
+      if (passes > 0 || fails > 0) {
+        checks.push({ name: 'All checks', passes, fails });
+      }
+    }
   }
 
   const testPassed = checks.reduce((s, c) => s + c.passes, 0);
@@ -48,59 +64,64 @@ for (const file of summaryFiles) {
   grandTotalPassed += testPassed;
   grandTotalFailed += testFailed;
 
-  // Build metrics table
-  const metricsRows = [];
+  // Parse metrics - handle both metric.values and metric direct formats
+  const metricsList = [];
   if (data.metrics) {
-    const importantMetrics = [
+    const importantKeys = [
       'http_req_duration',
-      'http_reqs',
+      'http_reqs', 
       'http_req_failed',
       'iterations',
       'data_received',
-      'data_sent'
+      'data_sent',
+      'vus',
+      'vus_max',
+      'iteration_duration'
     ];
     
-    for (const key of importantMetrics) {
+    for (const key of importantKeys) {
       const metric = data.metrics[key];
       if (!metric) continue;
-      const vals = metric.values || {};
+      
+      // Merge metric.values and direct metric properties (handles empty metric.values object)
+      const vals = { ...(typeof metric === 'object' && metric !== null ? metric : {}), ...(metric.values || {}) };
       const tags = [];
       
+      // Duration/counter metrics
       if (vals.avg !== undefined) tags.push({ label: 'Avg', value: formatDuration(vals.avg) });
       if (vals.min !== undefined) tags.push({ label: 'Min', value: formatDuration(vals.min) });
       if (vals.med !== undefined) tags.push({ label: 'Med', value: formatDuration(vals.med) });
+      if (vals.max !== undefined) tags.push({ label: 'Max', value: formatDuration(vals.max) });
       if (vals['p(90)'] !== undefined) tags.push({ label: 'P90', value: formatDuration(vals['p(90)']) });
       if (vals['p(95)'] !== undefined) tags.push({ label: 'P95', value: formatDuration(vals['p(95)']) });
-      if (vals['p(99)'] !== undefined) tags.push({ label: 'P99', value: formatDuration(vals['p(99)']) });
-      if (vals.max !== undefined) tags.push({ label: 'Max', value: formatDuration(vals.max) });
-      if (vals.rate !== undefined) tags.push({ label: 'Rate', value: (vals.rate * 100).toFixed(1) + '%' });
-      if (vals.count !== undefined) tags.push({ label: 'Count', value: vals.count.toLocaleString() });
       
-      // Special handling for http_req_failed
-      let status = 'neutral';
-      if (key === 'http_req_failed' && vals.rate !== undefined) {
-        if (vals.rate === 0) status = 'good';
-        else if (vals.rate > 0.05) status = 'bad';
-        else status = 'warn';
+      // Counters and rates
+      if (vals.count !== undefined) tags.push({ label: 'Count', value: vals.count.toLocaleString() });
+      if (vals.rate !== undefined) {
+        const rateStr = (vals.rate * 100).toFixed(2) + '%';
+        let cls = '';
+        if (key === 'http_req_failed') {
+          if (vals.rate === 0) cls = 'good';
+          else if (vals.rate > 0.05) cls = 'bad';
+          else cls = 'warn';
+        }
+        tags.push({ label: 'Rate', value: rateStr, class: cls });
       }
       
-      metricsRows.push({ name: key, tags, status });
-    }
-  }
-
-  // Thresholds
-  const thresholds = [];
-  if (data.metrics) {
-    for (const [key, metric] of Object.entries(data.metrics)) {
+      // Thresholds
+      const thresholds = [];
       if (metric.thresholds) {
         for (const [tKey, tVal] of Object.entries(metric.thresholds)) {
+          const ok = tVal.ok === true || tVal.ok === 'true' || tVal.ok === 1;
           thresholds.push({
-            metric: key,
             expression: tKey,
-            passed: tVal.ok,
-            actual: tVal.value
+            passed: ok
           });
         }
+      }
+      
+      if (tags.length > 0 || thresholds.length > 0) {
+        metricsList.push({ name: key, tags, thresholds });
       }
     }
   }
@@ -110,8 +131,7 @@ for (const file of summaryFiles) {
     checks,
     testPassed,
     testFailed,
-    metricsRows,
-    thresholds
+    metricsList
   });
 }
 
@@ -130,9 +150,8 @@ const html = `<!DOCTYPE html>
   h1 { color: #58a6ff; margin-bottom: 8px; font-size: 2rem; font-weight: 700; }
   .subtitle { color: #8b949e; margin-bottom: 32px; font-size: 0.95rem; }
   
-  /* Summary Cards */
   .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
-  .summary-card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; text-align: center; transition: border-color 0.2s; }
+  .summary-card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; text-align: center; }
   .summary-card:hover { border-color: #58a6ff; }
   .summary-card h3 { color: #8b949e; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-weight: 500; }
   .summary-card .value { font-size: 2.5rem; font-weight: 700; color: #f0f6fc; line-height: 1; }
@@ -140,7 +159,6 @@ const html = `<!DOCTYPE html>
   .summary-card .value.fail { color: #f85149; }
   .summary-card .detail { color: #8b949e; font-size: 0.85rem; margin-top: 8px; }
   
-  /* Test Sections */
   .test-section { background: #161b22; border: 1px solid #30363d; border-radius: 12px; margin-bottom: 24px; overflow: hidden; }
   .test-header { background: #1c2128; padding: 20px 24px; border-bottom: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center; }
   .test-header h2 { color: #f0f6fc; font-size: 1.25rem; font-weight: 600; margin: 0; }
@@ -151,13 +169,11 @@ const html = `<!DOCTYPE html>
   
   .test-body { padding: 24px; }
   
-  /* Metrics Table */
   .metrics-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
   .metrics-table th { text-align: left; padding: 12px 16px; font-size: 0.8rem; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #30363d; background: #0d1117; }
   .metrics-table td { padding: 14px 16px; border-bottom: 1px solid #21262d; font-size: 0.9rem; }
   .metrics-table tr:hover td { background: #1c2128; }
-  .metric-name { font-weight: 600; color: #f0f6fc; }
-  .metric-name code { background: #21262d; padding: 2px 8px; border-radius: 4px; font-family: 'SF Mono', monospace; font-size: 0.85rem; }
+  .metric-name { font-weight: 600; color: #f0f6fc; font-family: 'SF Mono', monospace; font-size: 0.85rem; }
   
   .tags { display: flex; gap: 8px; flex-wrap: wrap; }
   .tag { background: #1f2937; color: #d1d5db; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 500; }
@@ -165,8 +181,7 @@ const html = `<!DOCTYPE html>
   .tag.warn { background: #2d1f0f; color: #d29922; }
   .tag.bad { background: #2d0f0f; color: #f85149; }
   
-  /* Checks Section */
-  .checks-section { background: #0d1117; border-radius: 8px; padding: 16px; }
+  .checks-section { background: #0d1117; border-radius: 8px; padding: 16px; margin-top: 16px; }
   .checks-section h4 { color: #8b949e; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
   .check-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-radius: 6px; margin-bottom: 4px; }
   .check-item:hover { background: #161b22; }
@@ -175,7 +190,6 @@ const html = `<!DOCTYPE html>
   .check-pass { color: #3fb950; font-weight: 600; }
   .check-fail { color: #f85149; font-weight: 600; }
   
-  /* Thresholds */
   .thresholds-section { margin-top: 20px; }
   .thresholds-section h4 { color: #8b949e; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
   .threshold-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 6px; margin-bottom: 4px; }
@@ -184,14 +198,7 @@ const html = `<!DOCTYPE html>
   .threshold-pass { color: #3fb950; }
   .threshold-fail { color: #f85149; }
   .threshold-text { flex: 1; color: #c9d1d9; font-size: 0.9rem; }
-  .threshold-metric { color: #8b949e; font-size: 0.8rem; }
-  
-  /* Legend */
-  .legend { display: flex; gap: 16px; margin-top: 24px; padding-top: 24px; border-top: 1px solid #30363d; font-size: 0.85rem; color: #8b949e; }
-  .legend-item { display: flex; align-items: center; gap: 6px; }
-  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
-  .legend-dot.pass { background: #3fb950; }
-  .legend-dot.fail { background: #f85149; }
+  .threshold-metric { color: #8b949e; font-size: 0.8rem; font-family: monospace; }
 </style>
 </head>
 <body>
@@ -242,21 +249,12 @@ const html = `<!DOCTYPE html>
           </tr>
         </thead>
         <tbody>
-          ${test.metricsRows.map(row => `
+          ${test.metricsList.map(row => `
           <tr>
-            <td><span class="metric-name"><code>${row.name}</code></span></td>
+            <td><span class="metric-name">${row.name}</span></td>
             <td>
               <div class="tags">
-                ${row.tags.map(tag => {
-                  let cls = '';
-                  if (tag.label === 'Rate' && row.name === 'http_req_failed') {
-                    const rateVal = parseFloat(tag.value);
-                    if (rateVal === 0) cls = 'good';
-                    else if (rateVal < 5) cls = 'warn';
-                    else cls = 'bad';
-                  }
-                  return `<span class="tag ${cls}">${tag.label}: ${tag.value}</span>`;
-                }).join('')}
+                ${row.tags.map(tag => `<span class="tag ${tag.class || ''}">${tag.label}: ${tag.value}</span>`).join('')}
               </div>
             </td>
           </tr>
@@ -279,27 +277,21 @@ const html = `<!DOCTYPE html>
       </div>
       ` : ''}
       
-      ${test.thresholds.length > 0 ? `
+      ${test.metricsList.some(m => m.thresholds.length > 0) ? `
       <div class="thresholds-section">
         <h4>Thresholds</h4>
-        ${test.thresholds.map(t => `
+        ${test.metricsList.flatMap(m => m.thresholds.map(t => `
         <div class="threshold-item">
           <span class="threshold-icon ${t.passed ? 'threshold-pass' : 'threshold-fail'}">${t.passed ? '✓' : '✗'}</span>
           <span class="threshold-text">${t.expression}</span>
-          <span class="threshold-metric">${t.metric}</span>
+          <span class="threshold-metric">${m.name}</span>
         </div>
-        `).join('')}
+        `)).join('')}
       </div>
       ` : ''}
     </div>
   </div>
   `).join('')}
-  
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot pass"></div> Passed</div>
-    <div class="legend-item"><div class="legend-dot fail"></div> Failed</div>
-    <div class="legend-item">Metrics show Avg/Min/Med/P90/P95/P99/Max</div>
-  </div>
 </div>
 </body>
 </html>`;
