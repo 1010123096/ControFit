@@ -60,7 +60,7 @@ namespace ControlFit.Tests.Integration
             var id = data.GetProperty("id").GetInt32();
             Assert.True(id > 0);
             Assert.Equal(nombre, data.GetProperty("nombre").GetString());
-            Assert.Equal(30, data.GetProperty("duracion").GetInt32());
+            Assert.Equal(30, data.GetProperty("duracionDias").GetInt32());
             Assert.Equal(99.99, data.GetProperty("precio").GetDouble(), 1);
             Assert.Equal(GimnasioId, data.GetProperty("gimnasioId").GetInt32());
 
@@ -161,7 +161,7 @@ namespace ControlFit.Tests.Integration
             var doc = JsonDocument.Parse(body);
             var data = doc.RootElement.GetProperty("data");
             Assert.Equal(createDto.Nombre, data.GetProperty("nombre").GetString());
-            Assert.Equal(30, data.GetProperty("duracion").GetInt32());
+            Assert.Equal(30, data.GetProperty("duracionDias").GetInt32());
             Assert.Equal(79.99, data.GetProperty("precio").GetDouble(), 1);
             Assert.True(data.GetProperty("estado").GetBoolean());
         }

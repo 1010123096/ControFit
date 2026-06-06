@@ -9,7 +9,10 @@ namespace ControlFit.Tests.Integration
     [Collection("IntegrationTests")]
     public class GimnasioIntegrationTests : IntegrationTestBase
     {
-        public GimnasioIntegrationTests(ControlFitApiFactory factory) : base(factory) { }
+        public GimnasioIntegrationTests(ControlFitApiFactory factory) : base(factory)
+        {
+            SetAuthToken(SuperAdminToken);
+        }
 
         [Fact]
         public async Task Crear_ValidGym_ReturnsOk_WithCorrectJson_AndStoredInDb()

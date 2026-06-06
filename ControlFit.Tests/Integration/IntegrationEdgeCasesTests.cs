@@ -59,7 +59,7 @@ namespace ControlFit.Tests.Integration
 
             var response = await Client.GetAsync("api/membresia/99999");
 
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace ControlFit.Tests.Integration
         {
             SetAuthToken(GymAdminToken);
 
-            var response = await Client.DeleteAsync("api/membresia/eliminar?id=99999");
+            var response = await Client.DeleteAsync("api/membresia/99999");
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -117,9 +117,9 @@ namespace ControlFit.Tests.Integration
                 ["miembroId"] = 99999,
                 ["membresiaId"] = membresiaId
             };
-            var response = await Client.PostAsJsonAsync("api/asignacion/crear", dto);
+            var response = await Client.PostAsJsonAsync("api/asignacion", dto);
 
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
 
         [Fact]

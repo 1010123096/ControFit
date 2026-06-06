@@ -35,7 +35,7 @@ for (const file of summaryFiles) {
     }
   }
 
-  if (data.root_group && data.root_group.checks) {
+  if (data.root_group && Array.isArray(data.root_group.checks)) {
     for (const check of data.root_group.checks) {
       checks.push({
         name: check.name,

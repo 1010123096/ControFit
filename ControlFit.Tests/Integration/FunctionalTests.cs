@@ -12,9 +12,10 @@ namespace ControlFit.Tests.Integration
         [Fact]
         public async Task CompleteFlow_CreateGym_RegisterAdmin_CreateMember_AssignMembership_CheckIn()
         {
-            // 1. Create a new gym
+            // 1. Create a new gym (as SuperAdmin)
+            SetAuthToken(SuperAdminToken);
             var gymDto = new GimnasioCrearDTO($"Functional Flow Gym {Guid.NewGuid():N}", "123 Main St");
-            var gymResponse = await Client.PostAsJsonAsync("api/Gym/Crear", gymDto);
+            var gymResponse = await Client.PostAsJsonAsync("api/gimnasios/Registro", gymDto);
             Assert.Equal(HttpStatusCode.OK, gymResponse.StatusCode);
             var gymContent = await gymResponse.Content.ReadAsStringAsync();
             var gymDoc = System.Text.Json.JsonDocument.Parse(gymContent);
@@ -78,7 +79,6 @@ namespace ControlFit.Tests.Integration
             var memberId = memberDoc.RootElement.GetProperty("data").GetProperty("id").GetInt32();
 
             // 6. Assign membership
-            ClearAuthToken();
             var assignDto = new AsignacionMembresiaCrearDTO
             {
                 MiembroId = memberId,
@@ -155,7 +155,7 @@ namespace ControlFit.Tests.Integration
 
             var dto = new GimnasioCrearDTO($"Gym Admin Gym {Guid.NewGuid():N}", "Address");
 
-            var response = await Client.PostAsJsonAsync("api/Gym/Crear", dto);
+            var response = await Client.PostAsJsonAsync("api/gimnasios/Registro", dto);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
@@ -205,7 +205,7 @@ namespace ControlFit.Tests.Integration
             // 2. SuperAdmin creates a new gym
             SetAuthToken(SuperAdminToken);
             var gymDto = new GimnasioCrearDTO($"Other Gym {Guid.NewGuid():N}", "456 Other St");
-            var gymResponse = await Client.PostAsJsonAsync("api/Gym/Crear", gymDto);
+            var gymResponse = await Client.PostAsJsonAsync("api/gimnasios/Registro", gymDto);
             var gymContent = await gymResponse.Content.ReadAsStringAsync();
             var gymDoc = System.Text.Json.JsonDocument.Parse(gymContent);
             var otherGymId = gymDoc.RootElement.GetProperty("data").GetProperty("id").GetInt32();

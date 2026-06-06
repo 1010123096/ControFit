@@ -44,8 +44,6 @@ namespace ControlFit.Tests.Integration
             var membershipDoc = JsonDocument.Parse(membershipContent);
             var membershipId = membershipDoc.RootElement.GetProperty("data").GetProperty("id").GetInt32();
 
-            ClearAuthToken();
-
             var assignDto = new AsignacionMembresiaCrearDTO { MiembroId = memberId, MembresiaId = membershipId };
             var assignResponse = await Client.PostAsJsonAsync("api/asignacion", assignDto);
             var assignContent = await assignResponse.Content.ReadAsStringAsync();
@@ -150,7 +148,7 @@ namespace ControlFit.Tests.Integration
         {
             SetAuthToken(SuperAdminToken);
             var otherGymDto = new GimnasioCrearDTO($"Other Gym Asistencia {Guid.NewGuid():N}", "Other Address");
-            var otherGymResponse = await Client.PostAsJsonAsync("api/Gym/Crear", otherGymDto);
+            var otherGymResponse = await Client.PostAsJsonAsync("api/gimnasios/Registro", otherGymDto);
             var otherGymContent = await otherGymResponse.Content.ReadAsStringAsync();
             var otherGymDoc = JsonDocument.Parse(otherGymContent);
             var otherGymId = otherGymDoc.RootElement.GetProperty("data").GetProperty("id").GetInt32();
@@ -199,7 +197,6 @@ namespace ControlFit.Tests.Integration
             var membershipDoc = JsonDocument.Parse(membershipContent);
             var otherMembershipId = membershipDoc.RootElement.GetProperty("data").GetProperty("id").GetInt32();
 
-            ClearAuthToken();
             var assignDto = new AsignacionMembresiaCrearDTO { MiembroId = otherMemberId, MembresiaId = otherMembershipId };
             await Client.PostAsJsonAsync("api/asignacion", assignDto);
 

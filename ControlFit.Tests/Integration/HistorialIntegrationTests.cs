@@ -41,8 +41,6 @@ namespace ControlFit.Tests.Integration
             var membershipDoc = System.Text.Json.JsonDocument.Parse(membershipContent);
             var membershipId = membershipDoc.RootElement.GetProperty("data").GetProperty("id").GetInt32();
 
-            ClearAuthToken();
-
             var assignDto = new AsignacionMembresiaCrearDTO
             {
                 MiembroId = memberId,

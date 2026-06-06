@@ -43,8 +43,6 @@ namespace ControlFit.Tests.Integration
             var membershipDoc = JsonDocument.Parse(membershipContent);
             var membershipId = membershipDoc.RootElement.GetProperty("data").GetProperty("id").GetInt32();
 
-            ClearAuthToken();
-
             return (memberId, membershipId);
         }
 
@@ -130,6 +128,7 @@ namespace ControlFit.Tests.Integration
         [Fact]
         public async Task ObtenerTodos_ReturnsAssignments()
         {
+            SetAuthToken(GymAdminToken);
             var response = await Client.GetAsync("api/asignacion");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -158,6 +157,7 @@ namespace ControlFit.Tests.Integration
         [Fact]
         public async Task ObtenerPorId_InvalidId_ReturnsError()
         {
+            SetAuthToken(GymAdminToken);
             var response = await Client.GetAsync("api/asignacion/9999");
 
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);

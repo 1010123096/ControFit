@@ -55,7 +55,7 @@ namespace ControlFit.Tests.Integration
             var data = doc.RootElement.GetProperty("data");
             var id = data.GetProperty("id").GetInt32();
             Assert.True(id > 0);
-            Assert.Equal(miembroNombre, data.GetProperty("nombre").GetString());
+            Assert.Equal(miembroNombre, data.GetProperty("nombreCompleto").GetString());
             Assert.Equal(miembroCorreo, data.GetProperty("correo").GetString());
             Assert.True(data.GetProperty("estado").GetBoolean());
 
@@ -159,7 +159,7 @@ namespace ControlFit.Tests.Integration
             var doc = JsonDocument.Parse(body);
             var data = doc.RootElement.GetProperty("data");
             Assert.Equal(memberId, data.GetProperty("id").GetInt32());
-            Assert.Equal("CreateGet Member", data.GetProperty("nombre").GetString());
+            Assert.Equal("CreateGet Member", data.GetProperty("nombreCompleto").GetString());
             Assert.Equal(createDto.Correo, data.GetProperty("correo").GetString());
         }
 

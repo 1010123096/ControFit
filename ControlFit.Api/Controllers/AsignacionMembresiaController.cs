@@ -22,29 +22,55 @@ namespace ControlFit.Api.Controllers
         public async Task<IActionResult> Crear(
             [FromBody] AsignacionMembresiaCrearDTO dto)
         {
-            var resultado = await _service.Crear(dto);
-
-            return Ok(resultado);
+            try
+            {
+                var resultado = await _service.Crear(dto);
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> ObtenerTodos()
         {
-            return Ok(await _service.ObtenerTodos());
+            try
+            {
+                return Ok(await _service.ObtenerTodos());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> ObtenerPorId(int id)
         {
-            return Ok(await _service.ObtenerPorId(id));
+            try
+            {
+                return Ok(await _service.ObtenerPorId(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Eliminar(int id)
         {
-            await _service.Eliminar(id);
-
-            return Ok();
+            try
+            {
+                await _service.Eliminar(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
     }
 }
