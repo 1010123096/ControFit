@@ -1,1 +1,1 @@
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\.sonarqube\out\3
+/Users/nevso/ControFit/.sonarqube/out/3

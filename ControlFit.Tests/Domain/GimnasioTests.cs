@@ -21,7 +21,7 @@ namespace ControlFit.Tests.Domain
             var gimnasio = new Gimnasio();
 
             Assert.Equal(0, gimnasio.Id);
-            Assert.Null(gimnasio.Nombre);
+            Assert.Equal(string.Empty, gimnasio.Nombre);
         }
 
         [Fact]

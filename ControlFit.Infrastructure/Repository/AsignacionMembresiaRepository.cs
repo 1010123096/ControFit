@@ -77,7 +77,7 @@ namespace ControlFit.Infrastructure.Repository
             return await _context.AsignacionesMembresia
                 .FirstOrDefaultAsync(x =>
                     x.MiembroId == miembroId &&
-                    x.Estado == true &&
+                    x.Estado &&
                     x.FechaFin >= DateTime.Today);
         }
     }

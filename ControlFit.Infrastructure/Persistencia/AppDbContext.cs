@@ -25,12 +25,7 @@ namespace ControlFit.Infrastructure.Persistencia
                 entity.ToTable("Administrador");
                 entity.HasKey(a => a.Id);
                 entity.Property(a => a.NombreCompleto).HasMaxLength(100).IsRequired();
-               // entity.Property(a => a.Documento).HasMaxLength(20);
                 entity.Property(a => a.Correo).HasMaxLength(100);
-               /* entity.Property(a => a.Telefono).HasMaxLength(20);
-                entity.Property(a => a.FechaCreacion);
-                entity.Property(a => a.Direccion).HasMaxLength(200);
-                entity.Property(a => a.Estado);*/
                 entity.Property(a => a.Contrasena).HasMaxLength(255).IsRequired();
             });
             modelBuilder.Entity<Miembro>(entity =>

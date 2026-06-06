@@ -1,16 +1,16 @@
-﻿C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\CasosUso\Auth\LoginAdministrador.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\CasosUso\Auth\RegistrarAdministrador.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\CasosUso\CRUDAsignacion\AsignacionMembresiaService.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\CasosUso\CRUDGimnasio\GimnasioService.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\CasosUso\CRUDMembresia\MembresiaService.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\CasosUso\CRUDMiembro\MiembroService.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\CasosUso\Ingreso\RegistrarIngreso.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\DTO\AdministradorDTO.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\DTO\AsignacionMembresiaCrearDTO.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\DTO\AsistenciaDTO.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\DTO\GimnasioDTO.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\DTO\MembresiaDTO.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\DTO\MiembroDTO.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\Servicios\ITokenService.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\Servicios\IUserContextService.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Application\Servicios\UserContextService.cs
+﻿/Users/nevso/ControFit/ControlFit.Application/CasosUso/Auth/LoginAdministrador.cs
+/Users/nevso/ControFit/ControlFit.Application/CasosUso/Auth/RegistrarAdministrador.cs
+/Users/nevso/ControFit/ControlFit.Application/CasosUso/CRUDAsignacion/AsignacionMembresiaService.cs
+/Users/nevso/ControFit/ControlFit.Application/CasosUso/CRUDGimnasio/GimnasioService.cs
+/Users/nevso/ControFit/ControlFit.Application/CasosUso/CRUDMembresia/MembresiaService.cs
+/Users/nevso/ControFit/ControlFit.Application/CasosUso/CRUDMiembro/MiembroService.cs
+/Users/nevso/ControFit/ControlFit.Application/CasosUso/Ingreso/RegistrarIngreso.cs
+/Users/nevso/ControFit/ControlFit.Application/DTO/AdministradorDTO.cs
+/Users/nevso/ControFit/ControlFit.Application/DTO/AsignacionMembresiaCrearDTO.cs
+/Users/nevso/ControFit/ControlFit.Application/DTO/AsistenciaDTO.cs
+/Users/nevso/ControFit/ControlFit.Application/DTO/GimnasioDTO.cs
+/Users/nevso/ControFit/ControlFit.Application/DTO/MembresiaDTO.cs
+/Users/nevso/ControFit/ControlFit.Application/DTO/MiembroDTO.cs
+/Users/nevso/ControFit/ControlFit.Application/Servicios/ITokenService.cs
+/Users/nevso/ControFit/ControlFit.Application/Servicios/IUserContextService.cs
+/Users/nevso/ControFit/ControlFit.Application/Servicios/UserContextService.cs

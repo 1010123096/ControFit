@@ -1,6 +1,7 @@
 using ControlFit.Application.CasosUso.CRUDGimnasio;
 using ControlFit.Application.DTO;
 using ControlFit.Application.Servicios;
+using ControlFit.Domain;
 using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
 using Moq;
@@ -40,7 +41,7 @@ namespace ControlFit.Tests.Application
             _userContextMock.Setup(x => x.EsAdminGimnasio()).Returns(true);
 
             var dto = new GimnasioCrearDTO("Test", "Address") { Estado = true };
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.CrearGimnasio(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.CrearGimnasio(dto));
 
             Assert.Contains("No tiene permiso", ex.Message);
         }
@@ -50,7 +51,7 @@ namespace ControlFit.Tests.Application
         {
             _userContextMock.Setup(x => x.EsAdminGimnasio()).Returns(false);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.CrearGimnasio(null!));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.CrearGimnasio(null!));
 
             Assert.Contains("obligatorios", ex.Message);
         }
@@ -62,7 +63,7 @@ namespace ControlFit.Tests.Application
             _repoMock.Setup(x => x.ObtenerPorNombreAsync("Duplicated")).ReturnsAsync((bool?)true);
 
             var dto = new GimnasioCrearDTO("Duplicated", "Address") { Estado = true };
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.CrearGimnasio(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.CrearGimnasio(dto));
 
             Assert.Contains("Ya existe", ex.Message);
         }
@@ -97,7 +98,7 @@ namespace ControlFit.Tests.Application
             _userContextMock.Setup(x => x.EsAdminGimnasio()).Returns(true);
             _userContextMock.Setup(x => x.GetGimnasioId()).Returns(1);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.BuscarPorId(2));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.BuscarPorId(2));
             Assert.Contains("permiso", ex.Message);
         }
 
@@ -107,7 +108,7 @@ namespace ControlFit.Tests.Application
             _userContextMock.Setup(x => x.EsAdminGimnasio()).Returns(false);
             _repoMock.Setup(x => x.ObtenerPorIdAsync(999)).ReturnsAsync((Gimnasio?)null);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.BuscarPorId(999));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.BuscarPorId(999));
             Assert.Contains("no existe", ex.Message);
         }
 
@@ -117,7 +118,7 @@ namespace ControlFit.Tests.Application
             _userContextMock.Setup(x => x.EsAdminGimnasio()).Returns(true);
 
             var dto = new GimnasioActualizarDTO { Id = 1, Nombre = "Test", Direccion = "Addr", Estado = true };
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.ActualizarGimnasio(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.ActualizarGimnasio(dto));
 
             Assert.Contains("No tiene permiso", ex.Message);
         }
@@ -142,7 +143,7 @@ namespace ControlFit.Tests.Application
         {
             _userContextMock.Setup(x => x.EsAdminGimnasio()).Returns(true);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.EliminarGimnasio(1));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.EliminarGimnasio(1));
             Assert.Contains("No tiene permiso", ex.Message);
         }
 

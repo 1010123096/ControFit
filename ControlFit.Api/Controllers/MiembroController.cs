@@ -1,7 +1,6 @@
 ﻿using ControlFit.Application.CasosUso.CRUDMiembro;
 using ControlFit.Application.DTO;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControlFit.Api.Controllers
@@ -9,12 +8,25 @@ namespace ControlFit.Api.Controllers
     [ApiController]
     [Route("api/miembros")]
     [Authorize]
-    public class MiembroController : Controller
+    public class MiembroController : ControllerBase
     {
         private readonly MiembroService _miembro;
         public MiembroController(MiembroService miembro)
         {
             _miembro = miembro;
+        }
+
+        private static MiembroDTO ToDTO(ControlFit.Domain.Entidad.Miembro m)
+        {
+            return new MiembroDTO
+            {
+                Id = m.Id,
+                Nombre = m.Nombre,
+                Correo = m.Correo,
+                Telefono = m.Telefono,
+                FechaNacimiento = m.FechaNacimiento,
+                GimnasioId = m.GimnasioId,
+            };
         }
 
         [HttpPost("Registro")]
@@ -26,7 +38,7 @@ namespace ControlFit.Api.Controllers
                 return Ok(new
                 {
                     message = "Miembro creado exitosamente",
-                    data = miembro
+                    data = ToDTO(miembro)
                 });
             }
             catch (Exception ex)
@@ -41,11 +53,12 @@ namespace ControlFit.Api.Controllers
             try
             {
                 var miembros = await _miembro.ListarMiembro();
+                var dtos = miembros.Select(ToDTO).ToList();
                 return Ok(new
                 {
                     message = "Miembros obtenidos exitosamente",
-                    data = miembros,
-                    total = miembros.Count
+                    data = dtos,
+                    total = dtos.Count
                 });
             }
             catch (Exception ex)
@@ -63,7 +76,7 @@ namespace ControlFit.Api.Controllers
                 return Ok(new
                 {
                     message = "Miembro obtenido exitosamente",
-                    data = miembro
+                    data = ToDTO(miembro)
                 });
             }
             catch (Exception ex)
@@ -77,11 +90,14 @@ namespace ControlFit.Api.Controllers
         {
             try
             {
-                var miembro = await _miembro.ActualizarMiembro(miembroDTO.Id, miembroDTO.Nombre, miembroDTO.Correo, miembroDTO.Telefono);
+                var actualizado = await _miembro.ActualizarMiembro(miembroDTO.Id, miembroDTO.Nombre, miembroDTO.Correo, miembroDTO.Telefono);
+                if (!actualizado)
+                    return BadRequest(new { error = "No se pudo actualizar el miembro" });
+                var miembro = await _miembro.ObtenerMiembroId(miembroDTO.Id);
                 return Ok(new
                 {
                     message = "Miembro actualizado exitosamente",
-                    data = miembro
+                    data = ToDTO(miembro)
                 });
             }
             catch (Exception ex)

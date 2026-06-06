@@ -3,6 +3,7 @@ using ControlFit.Application.CasosUso.Auth;
 using ControlFit.Application.CasosUso.CRUDGimnasio;
 using ControlFit.Application.DTO;
 using ControlFit.Application.Servicios;
+using ControlFit.Domain;
 using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +45,7 @@ namespace ControlFit.Tests.Api
 
             var gymRepoMock = new Mock<IGimnasioRepository>();
             gymRepoMock.Setup(x => x.ObtenerPorNombreAsync(It.IsAny<string>())).ReturnsAsync((bool?)false);
-            gymRepoMock.Setup(x => x.CrearAsync(It.IsAny<Gimnasio>())).ThrowsAsync(new Exception("Error de prueba"));
+            gymRepoMock.Setup(x => x.CrearAsync(It.IsAny<Gimnasio>())).ThrowsAsync(new DomainException("Error de prueba"));
 
             var userContextMock = new Mock<IUserContextService>();
             userContextMock.Setup(x => x.EsAdminGimnasio()).Returns(false);

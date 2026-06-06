@@ -25,7 +25,7 @@ namespace ControlFit.Tests.Application
         {
             var admin = new Administrador("Admin", "admin@test.com", BCrypt.Net.BCrypt.HashPassword("correctpass"), 1);
             _repoMock.Setup(x => x.ObtenerPorCorreoAsync("admin@test.com")).ReturnsAsync(admin);
-            _tokenServiceMock.Setup(x => x.GenerarToken(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int?>())).Returns("jwt-token");
+            _tokenServiceMock.Setup(x => x.GenerarToken(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<string?>())).Returns("jwt-token");
 
             var dto = new LoginAdministradorDTO { correo = "admin@test.com", contrasena = "correctpass" };
             var result = await _service.EjecutarAsyncLogin(dto);

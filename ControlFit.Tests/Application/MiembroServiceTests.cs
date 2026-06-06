@@ -2,6 +2,7 @@ using ControlFit.Application.CasosUso.CRUDMiembro;
 using ControlFit.Application.DTO;
 using ControlFit.Application.Servicios;
 using ControlFit.Application.Repository;
+using ControlFit.Domain;
 using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
 using Moq;
@@ -20,7 +21,7 @@ namespace ControlFit.Tests.Application
             _repoMock = new Mock<IMiembroRepository>();
             _userContextMock = new Mock<IUserContextService>();
             _tokenServiceMock = new Mock<ITokenService>();
-            _service = new MiembroService(_repoMock.Object, _tokenServiceMock.Object, _userContextMock.Object);
+            _service = new MiembroService(_repoMock.Object, _userContextMock.Object);
         }
 
         [Fact]
@@ -29,7 +30,7 @@ namespace ControlFit.Tests.Application
             _userContextMock.Setup(x => x.EsSuperAdmin()).Returns(true);
 
             var dto = new MiembroDTO { Nombre = "Test", Correo = "test@test.com", Telefono = "999", FechaNacimiento = new DateOnly(1990, 1, 1), GimnasioId = 0 };
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.Crearmiembro(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Crearmiembro(dto));
 
             Assert.Contains("Super Admin", ex.Message);
         }
@@ -41,7 +42,7 @@ namespace ControlFit.Tests.Application
             _userContextMock.Setup(x => x.GetGimnasioId()).Returns(1);
 
             var dto = new MiembroDTO { Nombre = "Test", Correo = "test@test.com", Telefono = "999", FechaNacimiento = new DateOnly(1990, 1, 1), GimnasioId = 2 };
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.Crearmiembro(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Crearmiembro(dto));
 
             Assert.Contains("permiso", ex.Message);
         }
@@ -101,7 +102,7 @@ namespace ControlFit.Tests.Application
             _userContextMock.Setup(x => x.EsSuperAdmin()).Returns(true);
             _repoMock.Setup(x => x.ObtenerPorIdAsync(999)).ReturnsAsync((Miembro?)null);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.ObtenerMiembroId(999));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.ObtenerMiembroId(999));
             Assert.Contains("no encontrado", ex.Message);
         }
 
@@ -135,7 +136,7 @@ namespace ControlFit.Tests.Application
             _userContextMock.Setup(x => x.EsSuperAdmin()).Returns(true);
             _repoMock.Setup(x => x.ObtenerPorIdAsync(999)).ReturnsAsync((Miembro?)null);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.EliminarMiembro(999));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.EliminarMiembro(999));
             Assert.Contains("no encontrado", ex.Message);
         }
     }

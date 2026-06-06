@@ -9,20 +9,20 @@ namespace ControlFit.Domain.Entidad
 {
     public class Membresia
     {
-        public int Id { get; private set; }
-        public string Nombre {  get; private set; }
-        public int Duración { get; private set; }
-        public double Precio { get; private set; }
-        public int? MaximoIngresosPorDia { get; private set; }
-        public int? MaximoIngresosPorSemana { get; private set; }
-        public int MaximoIngresosTotales { get; private set; }
-        public bool Estado { get; private set; }
+        public int Id { get; set; }
+        public string Nombre {  get; set; }
+        public int Duración { get; set; }
+        public double Precio { get; set; }
+        public int? MaximoIngresosPorDia { get; set; }
+        public int? MaximoIngresosPorSemana { get; set; }
+        public int MaximoIngresosTotales { get; set; }
+        public bool Estado { get; set; }
         
         /// <summary>
         /// ID del gimnasio al que pertenece esta membresía.
         /// </summary>
-        public int GimnasioId { get; private set; }
-        public Gimnasio Gimnasio { get; private set; }
+        public int GimnasioId { get; set; }
+        public Gimnasio? Gimnasio { get; set; }
 
         public Membresia(string nombre, int duración, double precio, bool estado)
         {

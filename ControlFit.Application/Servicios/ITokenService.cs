@@ -20,6 +20,6 @@ namespace ControlFit.Application.Repository
         /// > 0 = Admin de Gimnasio (acceso solo a su gimnasio)
         /// </param>
         /// <returns>Token JWT firmado</returns>
-        string GenerarToken(int administradorId, string correo, int? gimnasioId = null);
+        string GenerarToken(int administradorId, string correo, int? gimnasioId = null, string? nombreGimnasio = null);
     }
 }

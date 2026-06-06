@@ -1,4 +1,5 @@
 ﻿using ControlFit.Application.Servicios;
+using ControlFit.Domain;
 using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
 using System;
@@ -50,18 +51,18 @@ namespace ControlFit.Application.CasosUso.Ingreso
             {
                 var miembro = await _miembroRepository.ObtenerPorIdValidandoGimnasio(miembroId, gimnasioId);
                 if (miembro == null)
-                    throw new Exception("No tiene permiso para registrar ingreso de este miembro.");
+                    throw new DomainException("No tiene permiso para registrar ingreso de este miembro.");
             }
 
             var asignacion = await _asignacionRepository.ObtenerActivaAsync(miembroId);
 
             if (asignacion == null || !asignacion.EstaVigente())
-                throw new Exception("Membresía vencida");
+                throw new DomainException("Membresía vencida");
 
             var yaIngreso = await _asistenciaRepository.YaIngresoHoyAsync(miembroId);
 
             if (yaIngreso)
-                throw new Exception("El miembro ya ingresó hoy");
+                throw new DomainException("El miembro ya ingresó hoy");
 
             var membresia = await _membresiaRepository.ObtenerPorIdAsync(asignacion.MembresiaId);
 
@@ -70,7 +71,7 @@ namespace ControlFit.Application.CasosUso.Ingreso
             if (membresia.MaximoIngresosPorSemana.HasValue &&
                 ingresosSemana >= membresia.MaximoIngresosPorSemana.Value)
             {
-                throw new Exception("Límite semanal alcanzado");
+                throw new DomainException("Límite semanal alcanzado");
             }
 
             var asistencia = new Asistencia(miembroId, asignacion.Id);

@@ -1,5 +1,6 @@
 using ControlFit.Application.CasosUso.Ingreso;
 using ControlFit.Application.Servicios;
+using ControlFit.Domain;
 using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
 using Moq;
@@ -37,7 +38,7 @@ namespace ControlFit.Tests.Application
             _userContextMock.Setup(x => x.GetGimnasioId()).Returns(1);
             _miembroRepoMock.Setup(x => x.ObtenerPorIdValidandoGimnasio(999, 1)).ReturnsAsync((Miembro?)null);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.EjecutarAsync(999));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.EjecutarAsync(999));
             Assert.Contains("permiso", ex.Message);
         }
 
@@ -47,7 +48,7 @@ namespace ControlFit.Tests.Application
             _userContextMock.Setup(x => x.EsAdminGimnasio()).Returns(false);
             _asignacionRepoMock.Setup(x => x.ObtenerActivaAsync(1)).ReturnsAsync((AsignacionMembresia?)null);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.EjecutarAsync(1));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.EjecutarAsync(1));
             Assert.Contains("Membresía vencida", ex.Message);
         }
 
@@ -60,7 +61,7 @@ namespace ControlFit.Tests.Application
             _asignacionRepoMock.Setup(x => x.ObtenerActivaAsync(1)).ReturnsAsync(asig);
             _asistenciaRepoMock.Setup(x => x.YaIngresoHoyAsync(1)).ReturnsAsync(true);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.EjecutarAsync(1));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.EjecutarAsync(1));
             Assert.Contains("ya ingresó hoy", ex.Message);
         }
 
@@ -75,7 +76,7 @@ namespace ControlFit.Tests.Application
             _membresiaRepoMock.Setup(x => x.ObtenerPorIdAsync(It.IsAny<int>())).ReturnsAsync(membresia);
             _asistenciaRepoMock.Setup(x => x.ObtenerIngresosSemanaAsync(1)).ReturnsAsync(3);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.EjecutarAsync(1));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.EjecutarAsync(1));
             Assert.Contains("Límite semanal", ex.Message);
         }
 

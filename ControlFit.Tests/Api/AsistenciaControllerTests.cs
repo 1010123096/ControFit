@@ -101,5 +101,97 @@ namespace ControlFit.Tests.Api
             Assert.NotNull(result);
             Assert.Equal(200, result.StatusCode);
         }
+
+        [Fact]
+        public async Task ObtenerAsistencias_AsGymAdmin_ReturnsOk()
+        {
+            var userContextMock = new Mock<IUserContextService>();
+            userContextMock.Setup(x => x.EsSuperAdmin()).Returns(false);
+            userContextMock.Setup(x => x.GetGimnasioId()).Returns(1);
+
+            var asistencias = new Mock<IAsistenciaRepository>();
+            asistencias.Setup(x => x.ObtenerTodosPorGimnasio(1)).ReturnsAsync(new List<Asistencia>());
+
+            var controller = new AsistenciaController(
+                null!,
+                asistencias.Object,
+                Mock.Of<IMiembroRepository>(),
+                userContextMock.Object);
+
+            var result = await controller.ObtenerAsistencias() as OkObjectResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task FiltrarAsistencias_WithMemberId_ReturnsOk()
+        {
+            var userContextMock = new Mock<IUserContextService>();
+            userContextMock.Setup(x => x.EsAdminGimnasio()).Returns(false);
+            userContextMock.Setup(x => x.GetGimnasioId()).Returns(0);
+
+            var miembroRepoMock = new Mock<IMiembroRepository>();
+            miembroRepoMock.Setup(x => x.ObtenerPorIdAsync(1)).ReturnsAsync(new Miembro("Test", "t@t.com", "999", new DateOnly(1990, 1, 1), 1));
+
+            var asistencias = new Mock<IAsistenciaRepository>();
+            asistencias.Setup(x => x.ObtenerPorMiembroEnRango(1, It.IsAny<DateTime>(), It.IsAny<DateTime>(), 0))
+                .ReturnsAsync(new List<Asistencia>());
+
+            var controller = new AsistenciaController(
+                null!,
+                asistencias.Object,
+                miembroRepoMock.Object,
+                userContextMock.Object);
+
+            var result = await controller.FiltrarAsistencias(miembroId: 1) as OkObjectResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task FiltrarAsistencias_NoFilters_ReturnsOk()
+        {
+            var userContextMock = new Mock<IUserContextService>();
+            userContextMock.Setup(x => x.EsSuperAdmin()).Returns(true);
+            userContextMock.Setup(x => x.GetGimnasioId()).Returns(0);
+
+            var asistencias = new Mock<IAsistenciaRepository>();
+            asistencias.Setup(x => x.ObtenerTodosAsync()).ReturnsAsync(new List<Asistencia>());
+
+            var controller = new AsistenciaController(
+                null!,
+                asistencias.Object,
+                Mock.Of<IMiembroRepository>(),
+                userContextMock.Object);
+
+            var result = await controller.FiltrarAsistencias() as OkObjectResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task FiltrarAsistencias_AsGymAdmin_UnauthorizedMember_ReturnsUnauthorized()
+        {
+            var userContextMock = new Mock<IUserContextService>();
+            userContextMock.Setup(x => x.EsAdminGimnasio()).Returns(true);
+            userContextMock.Setup(x => x.GetGimnasioId()).Returns(1);
+
+            var miembroRepoMock = new Mock<IMiembroRepository>();
+            miembroRepoMock.Setup(x => x.ObtenerPorIdValidandoGimnasio(99, 1)).ReturnsAsync((Miembro?)null);
+
+            var controller = new AsistenciaController(
+                null!,
+                Mock.Of<IAsistenciaRepository>(),
+                miembroRepoMock.Object,
+                userContextMock.Object);
+
+            var result = await controller.FiltrarAsistencias(miembroId: 99) as UnauthorizedObjectResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(401, result.StatusCode);
+        }
     }
 }

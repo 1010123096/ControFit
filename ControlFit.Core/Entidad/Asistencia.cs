@@ -8,13 +8,13 @@ namespace ControlFit.Domain.Entidad
 {
     public class Asistencia
     {
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
-        public int MiembroId { get; private set; }
+        public int MiembroId { get; set; }
 
-        public int AsignacionMembresiaId { get; private set; }
+        public int AsignacionMembresiaId { get; set; }
 
-        public DateTime FechaHoraAcceso { get; private set; }
+        public DateTime FechaHoraAcceso { get; set; }
 
         public Asistencia(
             int miembroId,

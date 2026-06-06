@@ -4,6 +4,7 @@ using ControlFit.Application.CasosUso.CRUDMembresia;
 using ControlFit.Application.CasosUso.CRUDMiembro;
 using ControlFit.Application.CasosUso.CRUDAsignacion;
 using ControlFit.Application.CasosUso.Ingreso;
+using ControlFit.Application.CasosUso.Dashboard;
 using ControlFit.Application.Repository;
 using ControlFit.Application.Servicios;
 using ControlFit.Domain.Interfaz_puertos_;
@@ -72,6 +73,7 @@ builder.Services.AddScoped<IAsignacionMembresiaRepository, AsignacionMembresiaRe
 builder.Services.AddScoped<AsignacionMembresiaService>();
 builder.Services.AddScoped<IAsistenciaRepository, AsistenciaRepository>();
 builder.Services.AddScoped<RegistrarIngreso>();
+builder.Services.AddScoped<DashboardService>();
 
 var app = builder.Build();
 
@@ -93,6 +95,9 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();
 
-public partial class Program { }
+namespace ControlFit.Api
+{
+    public partial class Program { }
+}

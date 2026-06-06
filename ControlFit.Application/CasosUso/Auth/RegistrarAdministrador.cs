@@ -1,4 +1,5 @@
 ﻿using ControlFit.Application.DTO;
+using ControlFit.Domain;
 using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
 using System;
@@ -33,18 +34,18 @@ namespace ControlFit.Application.CasosUso.Auth
         public async Task EjecutarAsyncRegistrar(RegistroAdministradorDTO dto)
         {
             if (string.IsNullOrWhiteSpace(dto.nombreCompleto))
-                throw new Exception("El nombre completo es obligatorio");
+                throw new DomainException("El nombre completo es obligatorio");
 
             if (string.IsNullOrWhiteSpace(dto.correo))
-                throw new Exception("El correo es obligatorio");
+                throw new DomainException("El correo es obligatorio");
 
             if (string.IsNullOrWhiteSpace(dto.contrasena) || dto.contrasena.Length < 6)
-                throw new Exception("La contraseña debe tener al menos 6 caracteres");
+                throw new DomainException("La contraseña debe tener al menos 6 caracteres");
 
             // Verificar que el correo no esté registrado
             var existente = await _repo.ObtenerPorCorreoAsync(dto.correo);
             if (existente != null)
-                throw new Exception("El correo ya está registrado");
+                throw new DomainException("El correo ya está registrado");
 
             var admin = new Administrador(
                 dto.nombreCompleto,

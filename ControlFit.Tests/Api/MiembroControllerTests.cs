@@ -21,7 +21,7 @@ namespace ControlFit.Tests.Api
             _repoMock = new Mock<IMiembroRepository>();
             _userContextMock = new Mock<IUserContextService>();
             var tokenServiceMock = new Mock<ITokenService>();
-            var service = new MiembroService(_repoMock.Object, tokenServiceMock.Object, _userContextMock.Object);
+            var service = new MiembroService(_repoMock.Object, _userContextMock.Object);
             _controller = new MiembroController(service);
         }
 

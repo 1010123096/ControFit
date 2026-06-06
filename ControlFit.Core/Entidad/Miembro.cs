@@ -8,14 +8,14 @@ namespace ControlFit.Domain.Entidad
 {
     public class Miembro
     {
-        public int Id { get; private set; }
-        public string Nombre { get; private set; }
-        public string Correo { get; private set; }
-        public string Telefono { get; private set; }
-        public DateOnly FechaNacimiento { get; private set; }
-        public bool Estado { get; private set; }
-        public int GimnasioId { get; private set; }
-        public Gimnasio Gimnasio { get; private set; }
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Correo { get; set; }
+        public string Telefono { get; set; }
+        public DateOnly FechaNacimiento { get; set; }
+        public bool Estado { get; set; }
+        public int GimnasioId { get; set; }
+        public Gimnasio? Gimnasio { get; set; }
 
 
         public Miembro(string nombre, string correo, string telefono, DateOnly fechaNacimiento, int gimnasioId)

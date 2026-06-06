@@ -11,5 +11,6 @@ namespace ControlFit.Domain.Interfaz_puertos_
     {
         Task<Administrador?> ObtenerPorCorreoAsync(string correo);
         Task GuardarAsync(Administrador admin);
+        Task<List<Administrador>> ObtenerTodosAsync();
     }
 }

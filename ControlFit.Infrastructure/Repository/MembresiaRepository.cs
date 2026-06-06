@@ -1,4 +1,5 @@
-﻿using ControlFit.Domain.Entidad;
+﻿using ControlFit.Domain;
+using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
 using ControlFit.Infrastructure.Persistencia;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,7 @@ namespace ControlFit.Infrastructure.Repository
         .FirstOrDefaultAsync(m => m.Id == membresia.Id);
             if (membresiaExistente == null)
             {
-                throw new Exception("La membresía no se encuentra registrada");
+                throw new DomainException("La membresía no se encuentra registrada");
             }
             _appDbContext.Entry(membresiaExistente).CurrentValues.SetValues(membresia);
             return await _appDbContext.SaveChangesAsync() > 0;
@@ -38,7 +39,7 @@ namespace ControlFit.Infrastructure.Repository
         .FirstOrDefaultAsync(m => m.Nombre == membresia.Nombre);
             if (membresiaExistente != null)
             {
-                throw new Exception("La membresía ya se encuentra registrada");
+                throw new DomainException("La membresía ya se encuentra registrada");
             }
             await _appDbContext.Membresias.AddAsync(membresia);
             await _appDbContext.SaveChangesAsync();

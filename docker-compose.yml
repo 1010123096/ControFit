@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-controlfit
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "ControFit123!"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    restart: unless-stopped
+
   sonarqube:
     image: sonarqube:community
     container_name: sonarqube
@@ -24,6 +37,7 @@ services:
     restart: unless-stopped
 
 volumes:
+  sqlserver_data:
   sonarqube_data:
   sonarqube_logs:
   sonarqube_extensions:

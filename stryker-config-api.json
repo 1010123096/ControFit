@@ -1,0 +1,16 @@
+{
+  "stryker-config": {
+    "solution": "ControlFit.sln",
+    "project": "ControlFit.Api/ControlFit.Api.csproj",
+    "test-projects": ["ControlFit.Tests/ControlFit.Tests.csproj"],
+    "thresholds": {
+      "break": 20,
+      "high": 60,
+      "low": 20
+    },
+    "reporters": ["html", "json", "cleartext"],
+    "test-case-filter": "FullyQualifiedName~Api",
+    "verbosity": "info",
+    "concurrency": 4
+  }
+}

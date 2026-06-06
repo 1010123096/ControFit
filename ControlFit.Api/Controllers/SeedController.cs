@@ -11,6 +11,7 @@ namespace ControlFit.Api.Controllers
     {
         private readonly RegistrarAdministrador _registrar;
         private readonly GimnasioService _gimnasioService;
+        private const string ClavePorDefecto = "123456";
 
         public SeedController(RegistrarAdministrador registrar, GimnasioService gimnasioService)
         {
@@ -23,7 +24,7 @@ namespace ControlFit.Api.Controllers
         {
             try
             {
-                var gymDto = new GimnasioCrearDTO("FitZone Gym", "Av. Principal 123, Lima")
+                var gymDto = new GimnasioCrearDTO("FitZone Gym", "Av. Principal 123, Lima", "999-888-777")
                 {
                     Estado = true
                 };
@@ -33,7 +34,7 @@ namespace ControlFit.Api.Controllers
                 {
                     nombreCompleto = "Super Admin",
                     correo = "admin@controlfit.com",
-                    contrasena = "123456",
+                    contrasena = ClavePorDefecto,
                     GimnasioId = null
                 };
                 await _registrar.EjecutarAsyncRegistrar(superAdminDto);
@@ -42,7 +43,7 @@ namespace ControlFit.Api.Controllers
                 {
                     nombreCompleto = "Admin FitZone",
                     correo = "gym@fitzone.com",
-                    contrasena = "123456",
+                    contrasena = ClavePorDefecto,
                     GimnasioId = gym.Id
                 };
                 await _registrar.EjecutarAsyncRegistrar(gymAdminDto);
@@ -50,8 +51,8 @@ namespace ControlFit.Api.Controllers
                 return Ok(new
                 {
                     message = "Datos de prueba creados exitosamente",
-                    superAdmin = new { correo = "admin@controlfit.com", contrasena = "123456", tipo = "Super Admin", ruta = "/super-admin/dashboard" },
-                    gymAdmin = new { correo = "gym@fitzone.com", contrasena = "123456", tipo = "Admin Gimnasio", ruta = "/gym-admin/dashboard", gimnasio = "FitZone Gym" }
+                    superAdmin = new { correo = "admin@controlfit.com", contrasena = ClavePorDefecto, tipo = "Super Admin", ruta = "/super-admin/dashboard" },
+                    gymAdmin = new { correo = "gym@fitzone.com", contrasena = ClavePorDefecto, tipo = "Admin Gimnasio", ruta = "/gym-admin/dashboard", gimnasio = "FitZone Gym" }
                 });
             }
             catch (Exception ex)

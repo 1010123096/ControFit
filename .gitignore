@@ -16,7 +16,14 @@ coverage.opencover.xml
 cobertura.xml
 
 # SonarQube scanner output
-.sonarqube/out/
+.sonarqube/
+
+# Coverage reports
+coverage/
+
+# Stryker mutation test output
+StrykerOutput/
+MutationReport-*/
 
 # NuGet
 packages/

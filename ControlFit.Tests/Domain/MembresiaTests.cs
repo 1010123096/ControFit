@@ -39,6 +39,17 @@ namespace ControlFit.Tests.Domain
         }
 
         [Fact]
+        public void Constructor_WithFourParams_SetsNombreDuracionPrecioEstado()
+        {
+            var membresia = new Membresia("Gold", 60, 149.99, false);
+
+            Assert.Equal("Gold", membresia.Nombre);
+            Assert.Equal(60, membresia.Duración);
+            Assert.Equal(149.99, membresia.Precio);
+            Assert.False(membresia.Estado);
+        }
+
+        [Fact]
         public void Actualizar_WithNewData_UpdatesAllProperties()
         {
             var membresia = new Membresia("Old", 30, 100, 2, 10, 50, true, 1);

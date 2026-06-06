@@ -21,6 +21,9 @@ namespace ControlFit.Api.Controllers
     [Authorize]
     public class HistorialController : ControllerBase
     {
+        private const string MiembroInvalido = "ID de miembro inválido";
+        private const string MiembroNoEncontrado = "Miembro no encontrado";
+        private const string SinPermisoHistorial = "No tiene permiso para ver el historial de este miembro";
         private readonly IMiembroRepository _miembroRepository;
         private readonly IMembresiaRepository _membresiaRepository;
         private readonly IAsignacionMembresiaRepository _asignacionRepository;
@@ -42,6 +45,66 @@ namespace ControlFit.Api.Controllers
         }
 
         /// <summary>
+        /// Obtiene todos los historiales (endpoint unificado).
+        /// </summary>
+        [HttpGet]
+        public async Task<ActionResult> ObtenerTodos()
+        {
+            try
+            {
+                var gimnasioId = _userContext.GetGimnasioId();
+
+                var miembros = await _miembroRepository.ListarTodos();
+                if (_userContext.EsAdminGimnasio())
+                    miembros = miembros.Where(m => m.GimnasioId == gimnasioId).ToList();
+
+                var historial = new List<dynamic>();
+                foreach (var m in miembros)
+                {
+                    var asignaciones = await _asignacionRepository.ObtenerPorMiembroGimnasio(m.Id, gimnasioId);
+                    var asistencias = await _asistenciaRepository.ObtenerPorMiembroEnRango(
+                        m.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddDays(1), gimnasioId);
+
+                    foreach (var a in asignaciones)
+                    {
+                        historial.Add(new
+                        {
+                            id = a.Id,
+                            miembroId = m.Id,
+                            accion = $"Asignación de membresía",
+                            detalle = $"Miembro: {m.Nombre}",
+                            fecha = a.FechaAsignacion
+                        });
+                    }
+                    foreach (var a in asistencias)
+                    {
+                        historial.Add(new
+                        {
+                            id = a.Id + 10000,
+                            miembroId = m.Id,
+                            accion = "Ingreso al gimnasio",
+                            detalle = $"Miembro: {m.Nombre}",
+                            fecha = a.FechaHoraAcceso
+                        });
+                    }
+                }
+
+                historial = historial.OrderByDescending(h => (DateTime)h.fecha).ToList();
+
+                return Ok(new
+                {
+                    message = "Historial obtenido exitosamente",
+                    data = historial,
+                    total = historial.Count
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        /// <summary>
         /// Obtiene el historial de membresías asignadas a un miembro.
         /// Valida que el usuario tenga permisos para acceder a ese miembro.
         /// </summary>
@@ -51,7 +114,7 @@ namespace ControlFit.Api.Controllers
             try
             {
                 if (miembroId <= 0)
-                    return BadRequest(new { error = "ID de miembro inválido" });
+                    return BadRequest(new { error = MiembroInvalido });
 
                 var gimnasioId = _userContext.GetGimnasioId();
 
@@ -60,13 +123,13 @@ namespace ControlFit.Api.Controllers
                 {
                     var miembro = await _miembroRepository.ObtenerPorIdValidandoGimnasio(miembroId, gimnasioId);
                     if (miembro == null)
-                        return Unauthorized(new { error = "No tiene permiso para ver el historial de este miembro" });
+                        return Unauthorized(new { error = SinPermisoHistorial });
                 }
                 else
                 {
                     var miembro = await _miembroRepository.ObtenerPorIdAsync(miembroId);
                     if (miembro == null)
-                        return NotFound(new { error = "Miembro no encontrado" });
+                        return NotFound(new { error = MiembroNoEncontrado });
                 }
 
                 // Obtener asignaciones del miembro
@@ -115,7 +178,7 @@ namespace ControlFit.Api.Controllers
             try
             {
                 if (miembroId <= 0)
-                    return BadRequest(new { error = "ID de miembro inválido" });
+                    return BadRequest(new { error = MiembroInvalido });
 
                 var gimnasioId = _userContext.GetGimnasioId();
 
@@ -124,13 +187,13 @@ namespace ControlFit.Api.Controllers
                 {
                     var miembro = await _miembroRepository.ObtenerPorIdValidandoGimnasio(miembroId, gimnasioId);
                     if (miembro == null)
-                        return Unauthorized(new { error = "No tiene permiso para ver el historial de este miembro" });
+                        return Unauthorized(new { error = SinPermisoHistorial });
                 }
                 else
                 {
                     var miembro = await _miembroRepository.ObtenerPorIdAsync(miembroId);
                     if (miembro == null)
-                        return NotFound(new { error = "Miembro no encontrado" });
+                        return NotFound(new { error = MiembroNoEncontrado });
                 }
 
                 var asignaciones = await _asignacionRepository.ObtenerPorMiembroGimnasio(miembroId, gimnasioId);
@@ -172,7 +235,7 @@ namespace ControlFit.Api.Controllers
             try
             {
                 if (miembroId <= 0)
-                    return BadRequest(new { error = "ID de miembro inválido" });
+                    return BadRequest(new { error = MiembroInvalido });
 
                 var gimnasioId = _userContext.GetGimnasioId();
 
@@ -181,13 +244,13 @@ namespace ControlFit.Api.Controllers
                 {
                     var miembro = await _miembroRepository.ObtenerPorIdValidandoGimnasio(miembroId, gimnasioId);
                     if (miembro == null)
-                        return Unauthorized(new { error = "No tiene permiso para ver el historial de este miembro" });
+                        return Unauthorized(new { error = SinPermisoHistorial });
                 }
                 else
                 {
                     var miembro = await _miembroRepository.ObtenerPorIdAsync(miembroId);
                     if (miembro == null)
-                        return NotFound(new { error = "Miembro no encontrado" });
+                        return NotFound(new { error = MiembroNoEncontrado });
                 }
 
                 // Establecer rango de fechas
@@ -254,7 +317,7 @@ namespace ControlFit.Api.Controllers
             try
             {
                 if (miembroId <= 0)
-                    return BadRequest(new { error = "ID de miembro inválido" });
+                    return BadRequest(new { error = MiembroInvalido });
 
                 var gimnasioId = _userContext.GetGimnasioId();
 
@@ -264,12 +327,26 @@ namespace ControlFit.Api.Controllers
                     : await _miembroRepository.ObtenerPorIdAsync(miembroId);
 
                 if (miembro == null)
-                    return NotFound(new { error = "Miembro no encontrado" });
+                    return NotFound(new { error = MiembroNoEncontrado });
 
                 // Obtener asignación activa
                 var asignacionActiva = await _asignacionRepository.ObtenerActivaAsync(miembroId);
                 var membresiaActiva = asignacionActiva != null
                     ? await _membresiaRepository.ObtenerPorIdAsync(asignacionActiva.MembresiaId)
+                    : null;
+
+                var membresiaInfo = membresiaActiva != null
+                    ? new
+                    {
+                        id = membresiaActiva.Id,
+                        nombre = membresiaActiva.Nombre,
+                        duracion = membresiaActiva.Duración,
+                        precio = membresiaActiva.Precio,
+                        fechaVencimiento = asignacionActiva?.FechaVencimiento,
+                        diasRestantes = asignacionActiva != null
+                            ? (asignacionActiva.FechaVencimiento - DateTime.Now).Days
+                            : 0
+                    }
                     : null;
 
                 // Obtener últimas asistencias
@@ -295,17 +372,7 @@ namespace ControlFit.Api.Controllers
                             estado = miembro.Estado,
                             gimnasioId = miembro.GimnasioId
                         },
-                        membresiaActual = membresiaActiva != null ? new
-                        {
-                            id = membresiaActiva.Id,
-                            nombre = membresiaActiva.Nombre,
-                            duracion = membresiaActiva.Duración,
-                            precio = membresiaActiva.Precio,
-                            fechaVencimiento = asignacionActiva?.FechaVencimiento,
-                            diasRestantes = asignacionActiva != null 
-                                ? (asignacionActiva.FechaVencimiento - DateTime.Now).Days 
-                                : 0
-                        } : null,
+                        membresiaActual = membresiaInfo,
                         estadisticas = new
                         {
                             ingresosSemanal = asistenciasRecientes.Count,

@@ -30,7 +30,7 @@ namespace ControlFit.Tests.Infrastructure
             var claims = jwt.Claims.ToDictionary(c => c.Type, c => c.Value);
             Assert.Equal("admin@test.com", claims["email"]);
             Assert.Equal("1", claims["sub"]);
-            Assert.Equal("Administrador", claims["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]);
+            Assert.Equal("Admin Gimnasio", claims["role"]);
             Assert.Equal("5", claims["GimnasioId"]);
             Assert.Equal("ControlFit", jwt.Issuer);
         }

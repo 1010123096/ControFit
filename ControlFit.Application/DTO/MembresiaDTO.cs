@@ -55,15 +55,15 @@ namespace ControlFit.Application.DTO
     public class ActualizarMembresiaDTO
     {
         public int Id { get; set; }
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
 
         [JsonPropertyName("duracionDias")]
-        public int Duración { get; set; }
-        public double Precio { get; set; }
-        public bool Estado { get; set; }
-        public int MaximoIngresosPorDia { get; set; }
-        public int MaximoIngresosPorSemana { get; set; }
-        public int MaximoIngresosTotales { get; set; }
-        public int GimnasioId { get; set; }
+        public int? Duración { get; set; }
+        public double? Precio { get; set; }
+        public bool? Estado { get; set; }
+        public int? MaximoIngresosPorDia { get; set; }
+        public int? MaximoIngresosPorSemana { get; set; }
+        public int? MaximoIngresosTotales { get; set; }
+        public int? GimnasioId { get; set; }
     }
 }

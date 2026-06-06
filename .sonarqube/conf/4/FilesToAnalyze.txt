@@ -1,43 +1,47 @@
-﻿C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\AsignacionMembresiaControllerTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\AsistenciaControllerTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\AutenticacionControllerTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\GimnasioControllerTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\HistorialControllerTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\MembresiaControllerTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\MiembroControllerTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Api\SeedControllerTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\AsignacionMembresiaServiceTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\AsistenciaDTOTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\GimnasioServiceTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\LoginAdministradorTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\MembresiaServiceTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\MiembroServiceTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\RegistrarAdministradorTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\RegistrarIngresoTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Application\UserContextServiceTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Domain\AdministradorTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Domain\AsignacionMembresiaTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Domain\AsistenciaTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Domain\GimnasioTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Domain\MembresiaTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Domain\MiembroTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Infrastructure\AdministradorRepositoryTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Infrastructure\AsignacionMembresiaRepositoryTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Infrastructure\AsistenciaRepositoryTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Infrastructure\GimnasioRepositoryTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Infrastructure\MembresiaRepositoryTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Infrastructure\MiembroRepositoryTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\Infrastructure\TokenServiceTests.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\UnitTest1.cs
-C:\Users\alber\.nuget\packages\microsoft.net.test.sdk\17.8.0\build\netcoreapp3.1\Microsoft.NET.Test.Sdk.Program.cs
-C:\Users\alber\.nuget\packages\microsoft.testplatform.testhost\17.8.0\build\netcoreapp3.1\x64\testhost.exe
-C:\Users\alber\.nuget\packages\microsoft.testplatform.testhost\17.8.0\build\netcoreapp3.1\x64\testhost.dll
-C:\Users\alber\.nuget\packages\xunit.runner.visualstudio\2.5.3\build\net6.0\xunit.runner.visualstudio.dotnetcore.testadapter.dll
-C:\Users\alber\.nuget\packages\xunit.runner.visualstudio\2.5.3\build\net6.0\xunit.runner.reporters.netcoreapp10.dll
-C:\Users\alber\.nuget\packages\xunit.runner.visualstudio\2.5.3\build\net6.0\xunit.runner.utility.netcoreapp10.dll
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\coverage\coverage.cobertura.xml
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\coverage_sonar\coverage.opencover.xml
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\coverage_v2\coverage.cobertura.xml
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\TestResults\04709007-b99d-4a9b-b8d3-e39bb7e52bc4\coverage.cobertura.xml
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\TestResults\964d14cd-d625-440b-b6bb-467989afa1d8\coverage.cobertura.xml
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Tests\TestResults\b71a081a-6460-467d-b997-b7b4b109898a\coverage.cobertura.xml
+﻿/Users/nevso/ControFit/ControlFit.Tests/Api/AsignacionMembresiaControllerTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Api/AsistenciaControllerTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Api/AutenticacionControllerTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Api/GimnasioControllerTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Api/HistorialControllerTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Api/MembresiaControllerTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Api/MiembroControllerTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Api/SeedControllerTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Application/AsignacionMembresiaServiceTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Application/AsistenciaDTOTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Application/GimnasioServiceTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Application/LoginAdministradorTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Application/MembresiaServiceTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Application/MiembroServiceTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Application/RegistrarAdministradorTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Application/RegistrarIngresoTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Application/UserContextServiceTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Domain/AdministradorTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Domain/AsignacionMembresiaTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Domain/AsistenciaTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Domain/GimnasioTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Domain/MembresiaTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Domain/MiembroTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Infrastructure/AdministradorRepositoryTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Infrastructure/AsignacionMembresiaRepositoryTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Infrastructure/AsistenciaRepositoryTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Infrastructure/GimnasioRepositoryTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Infrastructure/MembresiaRepositoryTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Infrastructure/MiembroRepositoryTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Infrastructure/TokenServiceTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Integration/AsignacionIntegrationTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Integration/AsistenciaIntegrationTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Integration/AuthIntegrationTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Integration/ControlFitApiFactory.cs
+/Users/nevso/ControFit/ControlFit.Tests/Integration/FunctionalTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Integration/GimnasioIntegrationTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Integration/HistorialIntegrationTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Integration/IntegrationCollection.cs
+/Users/nevso/ControFit/ControlFit.Tests/Integration/IntegrationTestBase.cs
+/Users/nevso/ControFit/ControlFit.Tests/Integration/MembresiaIntegrationTests.cs
+/Users/nevso/ControFit/ControlFit.Tests/Integration/MiembroIntegrationTests.cs
+/Users/nevso/.nuget/packages/microsoft.net.test.sdk/17.8.0/build/netcoreapp3.1/Microsoft.NET.Test.Sdk.Program.cs
+/Users/nevso/.nuget/packages/xunit.runner.visualstudio/2.5.3/build/net6.0/xunit.runner.visualstudio.dotnetcore.testadapter.dll
+/Users/nevso/.nuget/packages/xunit.runner.visualstudio/2.5.3/build/net6.0/xunit.runner.reporters.netcoreapp10.dll
+/Users/nevso/.nuget/packages/xunit.runner.visualstudio/2.5.3/build/net6.0/xunit.runner.utility.netcoreapp10.dll
+/Users/nevso/ControFit/ControlFit.Tests/coverage/coverage.cobertura.xml
+/Users/nevso/ControFit/ControlFit.Tests/coverage_v2/coverage.cobertura.xml

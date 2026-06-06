@@ -1,3 +1,4 @@
+using ControlFit.Api;
 using ControlFit.Application.Repository;
 using ControlFit.Domain.Entidad;
 using ControlFit.Infrastructure.Persistencia;
@@ -32,23 +33,42 @@ namespace ControlFit.Tests.Integration
         public ControlFitApiFactory()
         {
             DatabaseName = $"FitControl_Test_{Guid.NewGuid():N}";
-            var builder = new SqlConnectionStringBuilder
+            var envConnection = Environment.GetEnvironmentVariable("INTEGRATION_TEST_CONNECTION")
+                ?? Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
+
+            if (!string.IsNullOrEmpty(envConnection))
             {
-                DataSource = @"KEMTOKU\SQLEXPRESS",
-                IntegratedSecurity = true,
-                TrustServerCertificate = true,
-                MultipleActiveResultSets = true
-            };
-            _masterConnectionString = new SqlConnectionStringBuilder(builder.ConnectionString)
+                var builder = new SqlConnectionStringBuilder(envConnection)
+                {
+                    InitialCatalog = DatabaseName,
+                    ConnectTimeout = 30,
+                    TrustServerCertificate = true,
+                    MultipleActiveResultSets = true
+                };
+                _connectionString = builder.ConnectionString;
+                builder.InitialCatalog = "master";
+                _masterConnectionString = builder.ConnectionString;
+            }
+            else
             {
-                InitialCatalog = "master",
-                ConnectTimeout = 15
-            }.ConnectionString;
-            _connectionString = new SqlConnectionStringBuilder(builder.ConnectionString)
-            {
-                InitialCatalog = DatabaseName,
-                ConnectTimeout = 30
-            }.ConnectionString;
+                var builder = new SqlConnectionStringBuilder
+                {
+                    DataSource = @"KEMTOKU\SQLEXPRESS",
+                    IntegratedSecurity = true,
+                    TrustServerCertificate = true,
+                    MultipleActiveResultSets = true
+                };
+                _masterConnectionString = new SqlConnectionStringBuilder(builder.ConnectionString)
+                {
+                    InitialCatalog = "master",
+                    ConnectTimeout = 15
+                }.ConnectionString;
+                _connectionString = new SqlConnectionStringBuilder(builder.ConnectionString)
+                {
+                    InitialCatalog = DatabaseName,
+                    ConnectTimeout = 30
+                }.ConnectionString;
+            }
         }
 
         public string GetConnectionString() => _connectionString;

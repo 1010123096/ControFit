@@ -17,13 +17,16 @@ namespace ControlFit.Application.DTO
 
         public string Direccion { get; set; }
 
+        public string Telefono { get; set; }
+
         public bool Estado { get; set; }
 
-        public GimnasioCrearDTO(string nombre, string direccion)
+        public GimnasioCrearDTO(string nombre, string direccion, string telefono = "")
         {
             Nombre = nombre;
             FechaCreacion = DateOnly.FromDateTime(DateTime.Now);
             Direccion = direccion;
+            Telefono = telefono;
             Estado = true;
         }
     }
@@ -33,6 +36,8 @@ namespace ControlFit.Application.DTO
         public string Nombre { get; set; }
 
         public string Direccion { get; set; }
+
+        public string Telefono { get; set; }
 
         public bool Estado { get; set; }
 

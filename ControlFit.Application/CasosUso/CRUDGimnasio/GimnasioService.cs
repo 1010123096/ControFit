@@ -1,5 +1,6 @@
 ﻿using ControlFit.Application.DTO;
 using ControlFit.Application.Servicios;
+using ControlFit.Domain;
 using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
 using System;
@@ -30,22 +31,22 @@ namespace ControlFit.Application.CasosUso.CRUDGimnasio
         {
             // Solo Super Admin puede crear gimnasios
             if (_userContext.EsAdminGimnasio())
-                throw new Exception("No tiene permiso para crear gimnasios. Solo Super Admin puede hacerlo.");
+                throw new DomainException("No tiene permiso para crear gimnasios. Solo Super Admin puede hacerlo.");
 
             if (dto == null)
-                throw new Exception("Los datos del gimnasio son obligatorios");
+                throw new DomainException("Los datos del gimnasio son obligatorios");
 
             if (string.IsNullOrWhiteSpace(dto.Nombre))
-                throw new Exception("El nombre es obligatorio");
+                throw new DomainException("El nombre es obligatorio");
 
             if (string.IsNullOrWhiteSpace(dto.Direccion))
-                throw new Exception("La dirección es obligatoria");
+                throw new DomainException("La dirección es obligatoria");
 
             var existente = await _repo.ObtenerPorNombreAsync(dto.Nombre);
             if (existente == true)
-                throw new Exception("Ya existe un gimnasio con ese nombre");
+                throw new DomainException("Ya existe un gimnasio con ese nombre");
 
-            var gimnasio = new Gimnasio(dto.Nombre, dto.Direccion, dto.Estado);
+            var gimnasio = new Gimnasio(dto.Nombre, dto.Direccion, dto.Estado, dto.Telefono ?? "");
 
             return await _repo.CrearAsync(gimnasio);
         }
@@ -58,16 +59,16 @@ namespace ControlFit.Application.CasosUso.CRUDGimnasio
         public async Task<Gimnasio> BuscarPorId(int id)
         {
             if (id <= 0)
-                throw new Exception("Id inválido");
+                throw new DomainException("Id inválido");
 
             // Si es Admin de Gimnasio, validar que es su gimnasio
             if (_userContext.EsAdminGimnasio() && _userContext.GetGimnasioId() != id)
-                throw new Exception("No tiene permiso para acceder a este gimnasio");
+                throw new DomainException("No tiene permiso para acceder a este gimnasio");
 
             var gimnasio = await _repo.ObtenerPorIdAsync(id);
 
             if (gimnasio == null)
-                throw new Exception("El gimnasio no existe");
+                throw new DomainException("El gimnasio no existe");
 
             return gimnasio;
         }
@@ -100,27 +101,27 @@ namespace ControlFit.Application.CasosUso.CRUDGimnasio
         {
             // Solo Super Admin puede actualizar gimnasios
             if (_userContext.EsAdminGimnasio())
-                throw new Exception("No tiene permiso para editar gimnasios. Solo Super Admin puede hacerlo.");
+                throw new DomainException("No tiene permiso para editar gimnasios. Solo Super Admin puede hacerlo.");
 
             if (dto == null)
-                throw new Exception("Datos inválidos");
+                throw new DomainException("Datos inválidos");
 
             var gimnasio = await _repo.ObtenerPorIdAsync(dto.Id);
 
             if (gimnasio == null)
-                throw new Exception("El gimnasio no existe");
+                throw new DomainException("El gimnasio no existe");
 
             if (string.IsNullOrWhiteSpace(dto.Nombre))
-                throw new Exception("El nombre es obligatorio");
+                throw new DomainException("El nombre es obligatorio");
 
             if (string.IsNullOrWhiteSpace(dto.Direccion))
-                throw new Exception("La dirección es obligatoria");
+                throw new DomainException("La dirección es obligatoria");
 
             var duplicado = await _repo.ObtenerPorNombreAsync(dto.Nombre, dto.Id);
             if (duplicado == true)
-                throw new Exception("Ya existe otro gimnasio con ese nombre");
+                throw new DomainException("Ya existe otro gimnasio con ese nombre");
 
-            gimnasio.Actualizar(dto.Nombre, dto.Direccion);
+            gimnasio.Actualizar(dto.Nombre, dto.Direccion, dto.Telefono ?? "");
             gimnasio.EstablecerEstado(dto.Estado);
 
             return await _repo.ActualizarAsync(gimnasio);
@@ -134,11 +135,11 @@ namespace ControlFit.Application.CasosUso.CRUDGimnasio
         {
             // Solo Super Admin puede eliminar gimnasios
             if (_userContext.EsAdminGimnasio())
-                throw new Exception("No tiene permiso para eliminar gimnasios. Solo Super Admin puede hacerlo.");
+                throw new DomainException("No tiene permiso para eliminar gimnasios. Solo Super Admin puede hacerlo.");
 
             var gimnasio = await _repo.ObtenerPorIdAsync(id);
             if (gimnasio == null)
-                throw new Exception("El gimnasio no existe");
+                throw new DomainException("El gimnasio no existe");
 
             await _repo.EliminarAsync(id);
         }

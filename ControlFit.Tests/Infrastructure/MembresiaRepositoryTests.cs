@@ -1,3 +1,4 @@
+using ControlFit.Domain;
 using ControlFit.Domain.Entidad;
 using ControlFit.Infrastructure.Persistencia;
 using ControlFit.Infrastructure.Repository;
@@ -40,7 +41,7 @@ namespace ControlFit.Tests.Infrastructure
             await ctx.SaveChangesAsync();
             var repo = new MembresiaRepository(ctx);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() =>
+            var ex = await Assert.ThrowsAsync<DomainException>(() =>
                 repo.CrearAsync(CreateMembresia("Basica", 60.0, true, 1)));
             Assert.Contains("ya se encuentra registrada", ex.Message);
         }
@@ -93,7 +94,7 @@ namespace ControlFit.Tests.Infrastructure
             using var ctx = CreateDbContext();
             var repo = new MembresiaRepository(ctx);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() =>
+            var ex = await Assert.ThrowsAsync<DomainException>(() =>
                 repo.ActualizarAsync(CreateMembresia("NoExiste", 50.0, true, 1)));
             Assert.Contains("no se encuentra registrada", ex.Message);
         }

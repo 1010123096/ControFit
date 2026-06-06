@@ -9,7 +9,7 @@ namespace ControlFit.Api.Controllers
     [ApiController]
     [Route("api/gimnasios")]
     [Authorize]
-    public class GimnasioController : Controller
+    public class GimnasioController : ControllerBase
     {
         private readonly GimnasioService _gimnasioService;
 

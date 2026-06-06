@@ -8,21 +8,21 @@ namespace ControlFit.Domain.Entidad
 {
     public class AsignacionMembresia
     {
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
-        public int MiembroId { get; private set; }
+        public int MiembroId { get; set; }
 
-        public int MembresiaId { get; private set; }
+        public int MembresiaId { get; set; }
 
-        public DateTime FechaInicio { get; private set; }
+        public DateTime FechaInicio { get; set; }
 
-        public DateTime FechaFin { get; private set; }
+        public DateTime FechaFin { get; set; }
 
         public DateTime FechaAsignacion => FechaInicio;
 
         public DateTime FechaVencimiento => FechaFin;
 
-        public bool Estado { get; private set; }
+        public bool Estado { get; set; }
 
         public AsignacionMembresia() { }
         public AsignacionMembresia(int miembroId, Membresia membresia)

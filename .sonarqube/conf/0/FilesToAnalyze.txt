@@ -1,12 +1,13 @@
-﻿C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Core\Entidad\Administrador.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Core\Entidad\AsignacionMembresia.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Core\Entidad\Asistencia.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Core\Entidad\Gimnasio.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Core\Entidad\Membresia.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Core\Entidad\Miembro.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Core\Interfaz(puertos)\IAdministradorRepository.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Core\Interfaz(puertos)\IAsignacionMembresiaRepository.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Core\Interfaz(puertos)\IAsistenciaRepository.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Core\Interfaz(puertos)\IGimnasioRepository.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Core\Interfaz(puertos)\IMembresiaRepository.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Core\Interfaz(puertos)\IMiembroRepository.cs
+﻿/Users/nevso/ControFit/ControlFit.Core/DomainException.cs
+/Users/nevso/ControFit/ControlFit.Core/Entidad/Administrador.cs
+/Users/nevso/ControFit/ControlFit.Core/Entidad/AsignacionMembresia.cs
+/Users/nevso/ControFit/ControlFit.Core/Entidad/Asistencia.cs
+/Users/nevso/ControFit/ControlFit.Core/Entidad/Gimnasio.cs
+/Users/nevso/ControFit/ControlFit.Core/Entidad/Membresia.cs
+/Users/nevso/ControFit/ControlFit.Core/Entidad/Miembro.cs
+/Users/nevso/ControFit/ControlFit.Core/Interfaz(puertos)/IAdministradorRepository.cs
+/Users/nevso/ControFit/ControlFit.Core/Interfaz(puertos)/IAsignacionMembresiaRepository.cs
+/Users/nevso/ControFit/ControlFit.Core/Interfaz(puertos)/IAsistenciaRepository.cs
+/Users/nevso/ControFit/ControlFit.Core/Interfaz(puertos)/IGimnasioRepository.cs
+/Users/nevso/ControFit/ControlFit.Core/Interfaz(puertos)/IMembresiaRepository.cs
+/Users/nevso/ControFit/ControlFit.Core/Interfaz(puertos)/IMiembroRepository.cs

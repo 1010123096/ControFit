@@ -1,4 +1,5 @@
 ﻿using ControlFit.Application.DTO;
+using ControlFit.Domain;
 using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
 using System;
@@ -32,14 +33,14 @@ namespace ControlFit.Application.CasosUso.CRUDAsignacion
 
             if (miembro == null)
             {
-                throw new Exception("El miembro no existe.");
+                throw new DomainException("El miembro no existe.");
             }
 
             var membresia = await _membresiaRepo.ObtenerPorIdAsync(dto.MembresiaId);
 
             if (membresia == null)
             {
-                throw new Exception("La membresía no existe.");
+                throw new DomainException("La membresía no existe.");
             }
 
             var asignacionActiva =
@@ -47,7 +48,7 @@ namespace ControlFit.Application.CasosUso.CRUDAsignacion
 
             if (asignacionActiva != null)
             {
-                throw new Exception(
+                throw new DomainException(
                     "El miembro ya tiene una membresía activa.");
             }
 
@@ -70,7 +71,7 @@ namespace ControlFit.Application.CasosUso.CRUDAsignacion
 
             if (asignacion == null)
             {
-                throw new Exception("La asignación no existe.");
+                throw new DomainException("La asignación no existe.");
             }
 
             return asignacion;
@@ -82,14 +83,14 @@ namespace ControlFit.Application.CasosUso.CRUDAsignacion
 
             if (asignacion == null)
             {
-                throw new Exception("La asignación no existe.");
+                throw new DomainException("La asignación no existe.");
             }
 
             var eliminado = await _repo.EliminarAsync(id);
 
             if (!eliminado)
             {
-                throw new Exception(
+                throw new DomainException(
                     "No fue posible eliminar la asignación.");
             }
         }

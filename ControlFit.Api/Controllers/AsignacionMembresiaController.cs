@@ -1,12 +1,14 @@
 ﻿using ControlFit.Application.CasosUso.CRUDAsignacion;
 using ControlFit.Application.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControlFit.Api.Controllers
 {
     [ApiController]
     [Route("api/asignacion")]
-    public class AsignacionMembresiaController : Controller
+    [Authorize]
+    public class AsignacionMembresiaController : ControllerBase
     {
         private readonly AsignacionMembresiaService _service;
 

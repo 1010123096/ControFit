@@ -34,8 +34,9 @@ namespace ControlFit.Application.CasosUso.Auth
             if (administrador == null || !administrador.ValidarPassword(dto.contrasena))
                 return null;
 
-            // Generar token incluyendo GimnasioId (null = Super Admin)
-            return _tokenService.GenerarToken(administrador.Id, administrador.Correo, administrador.GimnasioId);
+            // Generar token incluyendo GimnasioId (null = Super Admin) y nombre del gimnasio
+            var nombreGimnasio = administrador.Gimnasio?.Nombre;
+            return _tokenService.GenerarToken(administrador.Id, administrador.Correo, administrador.GimnasioId, nombreGimnasio);
         }
     }
 }

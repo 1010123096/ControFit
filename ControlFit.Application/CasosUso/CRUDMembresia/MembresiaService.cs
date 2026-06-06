@@ -1,4 +1,5 @@
-﻿using ControlFit.Domain.Interfaz_puertos_;
+﻿using ControlFit.Domain;
+using ControlFit.Domain.Interfaz_puertos_;
 using System;
 using ControlFit.Domain.Entidad;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace ControlFit.Application.CasosUso.CRUDMembresia
                 membresia = await _membresiaRepository.ObtenerPorIdValidandoGimnasio(id, gimnasioId);
 
             if (membresia == null)
-                throw new Exception("Membresía no encontrada o no tiene permiso para acceder.");
+                throw new DomainException("Membresía no encontrada o no tiene permiso para acceder.");
 
             return membresia;
         }
@@ -48,26 +49,26 @@ namespace ControlFit.Application.CasosUso.CRUDMembresia
         public async Task<Membresia> Crear(CrearMembresiaDTO dto)
         {
             if (dto == null)
-                throw new Exception("Los datos de la membresía son obligatorios");
+                throw new DomainException("Los datos de la membresía son obligatorios");
 
             if (string.IsNullOrWhiteSpace(dto.Nombre))
-                throw new Exception("El nombre de la membresía es obligatorio");
+                throw new DomainException("El nombre de la membresía es obligatorio");
 
             if (dto.Duración <= 0)
-                throw new Exception("La duración debe ser mayor a 0");
+                throw new DomainException("La duración debe ser mayor a 0");
 
             if (dto.Precio < 0)
-                throw new Exception("El precio no puede ser negativo");
+                throw new DomainException("El precio no puede ser negativo");
 
             // Validar que el usuario es Admin de Gimnasio (no Super Admin)
             if (_userContext.EsSuperAdmin())
-                throw new Exception("Super Admin no puede crear membresías. Asígnese a un gimnasio primero.");
+                throw new DomainException("Super Admin no puede crear membresías. Asígnese a un gimnasio primero.");
 
             var gimnasioId = _userContext.GetGimnasioId();
 
             // Validar que el GimnasioId del DTO coincide con el del usuario
             if (dto.GimnasioId != gimnasioId)
-                throw new Exception("No tiene permiso para crear membresías en este gimnasio.");
+                throw new DomainException("No tiene permiso para crear membresías en este gimnasio.");
 
             var membresia = new Membresia(
                 dto.Nombre,
@@ -100,20 +101,12 @@ namespace ControlFit.Application.CasosUso.CRUDMembresia
 
         /// <summary>
         /// Actualiza una membresía validando permisos de gimnasio.
+        /// Solo actualiza los campos que vienen en el DTO (campos nullable).
         /// </summary>
         public async Task<bool> Actualizar(ActualizarMembresiaDTO dto)
         {
             if (dto == null)
-                throw new Exception("Los datos de la membresía son obligatorios");
-
-            if (string.IsNullOrWhiteSpace(dto.Nombre))
-                throw new Exception("El nombre de la membresía es obligatorio");
-
-            if (dto.Duración <= 0)
-                throw new Exception("La duración debe ser mayor a 0");
-
-            if (dto.Precio < 0)
-                throw new Exception("El precio no puede ser negativo");
+                throw new DomainException("Los datos de la membresía son obligatorios");
 
             var gimnasioId = _userContext.GetGimnasioId();
 
@@ -124,20 +117,45 @@ namespace ControlFit.Application.CasosUso.CRUDMembresia
                 membresia = await _membresiaRepository.ObtenerPorIdValidandoGimnasio(dto.Id, gimnasioId);
 
             if (membresia == null)
-                throw new Exception("Membresía no encontrada o no tiene permiso para actualizar.");
+                throw new DomainException("Membresía no encontrada o no tiene permiso para actualizar.");
 
-            // Validar que el GimnasioId no cambió si no es Super Admin
-            if (_userContext.EsAdminGimnasio() && dto.GimnasioId != membresia.GimnasioId)
-                throw new Exception("No puede cambiar el gimnasio asignado a la membresía.");
+            // Validar que el GimnasioId no cambió si no es Super Admin (solo si se envió)
+            if (dto.GimnasioId.HasValue && _userContext.EsAdminGimnasio() && dto.GimnasioId.Value != membresia.GimnasioId)
+                throw new DomainException("No puede cambiar el gimnasio asignado a la membresía.");
 
-            membresia.actualizar(
-                dto.Nombre,
-                dto.Duración,
-                dto.Precio,
-                dto.MaximoIngresosPorDia,
-                dto.MaximoIngresosPorSemana,
-                dto.MaximoIngresosTotales
-            );
+            // Actualizar solo los campos que vienen en el DTO
+            if (dto.Nombre != null)
+            {
+                if (string.IsNullOrWhiteSpace(dto.Nombre))
+                    throw new DomainException("El nombre de la membresía es obligatorio");
+                membresia.Nombre = dto.Nombre;
+            }
+
+            if (dto.Duración.HasValue)
+            {
+                if (dto.Duración.Value <= 0)
+                    throw new DomainException("La duración debe ser mayor a 0");
+                membresia.Duración = dto.Duración.Value;
+            }
+
+            if (dto.Precio.HasValue)
+            {
+                if (dto.Precio.Value < 0)
+                    throw new DomainException("El precio no puede ser negativo");
+                membresia.Precio = dto.Precio.Value;
+            }
+
+            if (dto.Estado.HasValue)
+                membresia.Estado = dto.Estado.Value;
+
+            if (dto.MaximoIngresosPorDia.HasValue)
+                membresia.MaximoIngresosPorDia = dto.MaximoIngresosPorDia.Value;
+
+            if (dto.MaximoIngresosPorSemana.HasValue)
+                membresia.MaximoIngresosPorSemana = dto.MaximoIngresosPorSemana.Value;
+
+            if (dto.MaximoIngresosTotales.HasValue)
+                membresia.MaximoIngresosTotales = dto.MaximoIngresosTotales.Value;
 
             return await _membresiaRepository.ActualizarAsync(membresia);
         }
@@ -156,7 +174,7 @@ namespace ControlFit.Application.CasosUso.CRUDMembresia
                 membresia = await _membresiaRepository.ObtenerPorIdValidandoGimnasio(id, gimnasioId);
 
             if (membresia == null)
-                throw new Exception("Membresía no encontrada o no tiene permiso para eliminar.");
+                throw new DomainException("Membresía no encontrada o no tiene permiso para eliminar.");
 
             await _membresiaRepository.EliminarAsync(id);
         }

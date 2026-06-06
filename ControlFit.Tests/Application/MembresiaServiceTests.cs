@@ -1,6 +1,7 @@
 using ControlFit.Application.CasosUso.CRUDMembresia;
 using ControlFit.Application.DTO;
 using ControlFit.Application.Servicios;
+using ControlFit.Domain;
 using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
 using Moq;
@@ -26,7 +27,7 @@ namespace ControlFit.Tests.Application
             _userContextMock.Setup(x => x.EsSuperAdmin()).Returns(true);
 
             var dto = new CrearMembresiaDTO { Nombre = "Test", Duración = 30, Precio = 100, GimnasioId = 1 };
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.Crear(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Crear(dto));
 
             Assert.Contains("Super Admin", ex.Message);
         }
@@ -38,7 +39,7 @@ namespace ControlFit.Tests.Application
             _userContextMock.Setup(x => x.GetGimnasioId()).Returns(1);
 
             var dto = new CrearMembresiaDTO { Nombre = "Test", Duración = 30, Precio = 100, GimnasioId = 2 };
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.Crear(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Crear(dto));
 
             Assert.Contains("permiso", ex.Message);
         }
@@ -63,7 +64,7 @@ namespace ControlFit.Tests.Application
         {
             _userContextMock.Setup(x => x.EsSuperAdmin()).Returns(false);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.Crear(null!));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Crear(null!));
             Assert.Contains("obligatorios", ex.Message);
         }
 
@@ -71,7 +72,7 @@ namespace ControlFit.Tests.Application
         public async Task Crear_WithEmptyNombre_ThrowsException()
         {
             var dto = new CrearMembresiaDTO { Nombre = "", Duración = 30, Precio = 100, GimnasioId = 1 };
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.Crear(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Crear(dto));
 
             Assert.Contains("nombre", ex.Message);
         }
@@ -80,7 +81,7 @@ namespace ControlFit.Tests.Application
         public async Task Crear_WithNegativeDuracion_ThrowsException()
         {
             var dto = new CrearMembresiaDTO { Nombre = "Test", Duración = 0, Precio = 100, GimnasioId = 1 };
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.Crear(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Crear(dto));
 
             Assert.Contains("duración", ex.Message);
         }
@@ -126,7 +127,7 @@ namespace ControlFit.Tests.Application
             _userContextMock.Setup(x => x.EsSuperAdmin()).Returns(true);
             _repoMock.Setup(x => x.ObtenerPorIdAsync(999)).ReturnsAsync((Membresia?)null);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.ObtenerPorId(999));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.ObtenerPorId(999));
             Assert.Contains("no encontrada", ex.Message);
         }
 
@@ -161,7 +162,7 @@ namespace ControlFit.Tests.Application
             _userContextMock.Setup(x => x.EsSuperAdmin()).Returns(true);
             _repoMock.Setup(x => x.ObtenerPorIdAsync(999)).ReturnsAsync((Membresia?)null);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.Eliminar(999));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Eliminar(999));
             Assert.Contains("no encontrada", ex.Message);
         }
     }

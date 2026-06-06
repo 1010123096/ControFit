@@ -9,7 +9,7 @@ namespace ControlFit.Api.Controllers
     [ApiController]
     [Route("api/auth")]
   //  [Authorize]
-    public class AutenticacionController : Controller
+    public class AutenticacionController : ControllerBase
     {
         private readonly RegistrarAdministrador _registrar;
         private readonly LoginAdministrador _login;

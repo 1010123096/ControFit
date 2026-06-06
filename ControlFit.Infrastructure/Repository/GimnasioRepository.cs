@@ -45,7 +45,7 @@ namespace ControlFit.Infrastructure.Repository
 
         public async Task<List<Gimnasio?>> ListarTodos()
         {
-            return _context.gimnasios.AsNoTracking().ToList();
+            return await _context.gimnasios.AsNoTracking().ToListAsync();
         }
 
                 public async Task<Gimnasio?> ObtenerPorIdAsync(int id)
@@ -55,14 +55,16 @@ namespace ControlFit.Infrastructure.Repository
 
         public async Task<bool?> ObtenerPorNombreAsync(string nombre, int idActual)
         {
+            var nombreLower = nombre.Trim().ToLower();
             return await _context.gimnasios
-         .AnyAsync(g => g.Nombre.ToLower() == nombre.Trim().ToLower() && g.Id != idActual);
+         .AnyAsync(g => g.Nombre.ToLower() == nombreLower && g.Id != idActual);
         }
 
         public async Task<bool?> ObtenerPorNombreAsync(string nombre)
         {
+            var nombreLower = nombre.Trim().ToLower();
             return await _context.gimnasios
-         .AnyAsync(g => g.Nombre.ToLower() == nombre.Trim().ToLower());
+         .AnyAsync(g => g.Nombre.ToLower() == nombreLower);
         }
     }
 }

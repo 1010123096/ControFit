@@ -20,7 +20,7 @@ namespace ControlFit.Tests.Api
 
             var admin = new Administrador("Admin", "admin@test.com", BCrypt.Net.BCrypt.HashPassword("pass"), null);
             repoMock.Setup(x => x.ObtenerPorCorreoAsync("admin@test.com")).ReturnsAsync(admin);
-            tokenServiceMock.Setup(x => x.GenerarToken(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int?>())).Returns("jwt-token");
+            tokenServiceMock.Setup(x => x.GenerarToken(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<string?>())).Returns("jwt-token");
 
             var registrarMock = new Mock<RegistrarAdministrador>(Mock.Of<IAdministradorRepository>());
             var controller = new AutenticacionController(registrarMock.Object, loginService);

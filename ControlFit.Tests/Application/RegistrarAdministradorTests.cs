@@ -1,5 +1,6 @@
 using ControlFit.Application.CasosUso.Auth;
 using ControlFit.Application.DTO;
+using ControlFit.Domain;
 using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
 using Moq;
@@ -33,7 +34,7 @@ namespace ControlFit.Tests.Application
         {
             var dto = new RegistroAdministradorDTO { nombreCompleto = "", correo = "test@test.com", contrasena = "123456" };
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.EjecutarAsyncRegistrar(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.EjecutarAsyncRegistrar(dto));
             Assert.Contains("nombre completo", ex.Message);
         }
 
@@ -42,7 +43,7 @@ namespace ControlFit.Tests.Application
         {
             var dto = new RegistroAdministradorDTO { nombreCompleto = "Test", correo = "", contrasena = "123456" };
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.EjecutarAsyncRegistrar(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.EjecutarAsyncRegistrar(dto));
             Assert.Contains("correo", ex.Message);
         }
 
@@ -51,7 +52,7 @@ namespace ControlFit.Tests.Application
         {
             var dto = new RegistroAdministradorDTO { nombreCompleto = "Test", correo = "test@test.com", contrasena = "12345" };
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.EjecutarAsyncRegistrar(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.EjecutarAsyncRegistrar(dto));
             Assert.Contains("contraseña", ex.Message);
         }
 
@@ -61,7 +62,7 @@ namespace ControlFit.Tests.Application
             _repoMock.Setup(x => x.ObtenerPorCorreoAsync("existing@test.com")).ReturnsAsync(new Administrador("Existing", "existing@test.com", "pass", null));
 
             var dto = new RegistroAdministradorDTO { nombreCompleto = "Test", correo = "existing@test.com", contrasena = "123456" };
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.EjecutarAsyncRegistrar(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.EjecutarAsyncRegistrar(dto));
             Assert.Contains("ya está registrado", ex.Message);
         }
     }

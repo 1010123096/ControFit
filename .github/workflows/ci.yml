@@ -1,0 +1,214 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      run_performance:
+        description: 'Run k6 performance tests'
+        type: boolean
+        default: false
+
+env:
+  DOTNET_VERSION: '10.0.x'
+
+jobs:
+  unit:
+    name: Build & Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore ControlFit.sln
+
+      - name: Build
+        run: dotnet build ControlFit.Api/ControlFit.Api.csproj --no-restore --configuration Release
+
+      - name: Run unit tests
+        run: dotnet test ControlFit.Tests/ControlFit.Tests.csproj \
+          --no-restore --configuration Release \
+          --filter "FullyQualifiedName~Domain|FullyQualifiedName~Application|FullyQualifiedName~Api|FullyQualifiedName~Infrastructure" \
+          --logger "trx" \
+          --collect:"XPlat Code Coverage"
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-coverage
+          path: ControlFit.Tests/TestResults/**/coverage.cobertura.xml
+
+  integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: Y
+          MSSQL_SA_PASSWORD: Test123!
+          MSSQL_PID: Developer
+        ports:
+          - 1433:1433
+        options: >-
+          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P Test123! -C -Q 'SELECT 1'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore & Build
+        run: |
+          dotnet restore ControlFit.sln
+          dotnet build ControlFit.Tests/ControlFit.Tests.csproj --configuration Release --no-restore
+
+      - name: Run integration tests
+        run: dotnet test ControlFit.Tests/ControlFit.Tests.csproj \
+          --configuration Release --no-restore \
+          --filter "FullyQualifiedName~Integration" \
+          --logger "trx" \
+          --collect:"XPlat Code Coverage"
+        env:
+          INTEGRATION_TEST_CONNECTION: >-
+            Server=localhost;User Id=sa;Password=Test123!;TrustServerCertificate=true;MultipleActiveResultSets=true
+
+  mutation:
+    name: Mutation Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install Stryker.NET
+        run: dotnet tool install --global dotnet-stryker
+
+      - name: Restore & Build
+        run: |
+          dotnet restore ControlFit.sln
+          dotnet build ControlFit.Tests/ControlFit.Tests.csproj --configuration Release --no-restore
+
+      - name: Mutation - Domain
+        run: dotnet stryker --config-file "stryker-config-domain.json"
+        continue-on-error: true
+
+      - name: Mutation - Application
+        run: dotnet stryker --config-file "stryker-config-application.json"
+        continue-on-error: true
+
+      - name: Mutation - Infrastructure
+        run: dotnet stryker --config-file "stryker-config-infrastructure.json"
+        continue-on-error: true
+
+      - name: Mutation - API
+        run: dotnet stryker --config-file "stryker-config-api.json"
+        continue-on-error: true
+
+      - name: Upload mutation reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mutation-reports
+          path: StrykerOutput/
+
+  performance:
+    name: Performance Tests (k6)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_performance == 'true'
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: Y
+          MSSQL_SA_PASSWORD: Test123!
+          MSSQL_PID: Developer
+        ports:
+          - 1433:1433
+        options: >-
+          --health-cmd "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P Test123! -C -Q 'SELECT 1'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Setup k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Build & Start API
+        run: |
+          dotnet restore ControlFit.sln
+          dotnet build ControlFit.Api/ControlFit.Api.csproj --configuration Release --no-restore
+          dotnet run --project ControlFit.Api/ControlFit.Api.csproj --configuration Release \
+            --urls "http://0.0.0.0:5219" &
+        env:
+          ConnectionStrings__DefaultConnection: >-
+            Server=localhost;Database=FitControl;User Id=sa;Password=Test123!;TrustServerCertificate=true;MultipleActiveResultSets=true
+
+      - name: Wait for API readiness
+        run: |
+          echo "Waiting for API to start..."
+          for i in $(seq 1 30); do
+            if curl -s -o /dev/null -w "%{http_code}" http://localhost:5219/api/auth/login | grep -q "200\|401"; then
+              echo "API ready (HTTP $(curl -s -o /dev/null -w '%{http_code}' http://localhost:5219/api/auth/login))"
+              break
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 2
+          done
+
+      - name: Smoke test
+        continue-on-error: true
+        run: k6 run tests/performance/smoke.test.js \
+          --env BASE_URL="http://localhost:5219/api" \
+          --summary-export performance-smoke.json \
+          --no-usage-report
+
+      - name: Login load test
+        continue-on-error: true
+        run: k6 run tests/performance/login.test.js \
+          --env BASE_URL="http://localhost:5219/api" \
+          --summary-export performance-login.json \
+          --no-usage-report
+
+      - name: Stress test
+        continue-on-error: true
+        run: k6 run tests/performance/stress.test.js \
+          --env BASE_URL="http://localhost:5219/api" \
+          --summary-export performance-stress.json \
+          --no-usage-report
+
+      - name: Upload performance reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-reports
+          path: |
+            performance-*.json

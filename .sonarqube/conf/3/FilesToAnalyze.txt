@@ -1,17 +1,17 @@
-﻿C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\Controllers\AsignacionMembresiaController.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\Controllers\AsistenciaController.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\Controllers\AutenticacionController.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\Controllers\GimnasioController.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\Controllers\HistorialController.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\Controllers\MembresiaController.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\Controllers\MiembroController.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\Controllers\SeedController.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\Program.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\obj\Debug\net8.0\ControlFit.Api.GlobalUsings.g.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\obj\Debug\net8.0\ControlFit.Api.AssemblyInfo.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\obj\Debug\net8.0\ControlFit.Api.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\appsettings.Development.json
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\appsettings.json
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\ControlFit.Api.http
-C:\Users\alber\OneDrive\Escritorio\Proyectos pagos\GYMSOF\ControlFit\ControlFit.Api\Properties\launchSettings.json
+﻿/Users/nevso/ControFit/ControlFit.Api/Controllers/AsignacionMembresiaController.cs
+/Users/nevso/ControFit/ControlFit.Api/Controllers/AsistenciaController.cs
+/Users/nevso/ControFit/ControlFit.Api/Controllers/AutenticacionController.cs
+/Users/nevso/ControFit/ControlFit.Api/Controllers/GimnasioController.cs
+/Users/nevso/ControFit/ControlFit.Api/Controllers/HistorialController.cs
+/Users/nevso/ControFit/ControlFit.Api/Controllers/MembresiaController.cs
+/Users/nevso/ControFit/ControlFit.Api/Controllers/MiembroController.cs
+/Users/nevso/ControFit/ControlFit.Api/Controllers/SeedController.cs
+/Users/nevso/ControFit/ControlFit.Api/Program.cs
+/Users/nevso/ControFit/ControlFit.Api/obj/Debug/net8.0/ControlFit.Api.GlobalUsings.g.cs
+/Users/nevso/ControFit/ControlFit.Api/obj/Debug/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+/Users/nevso/ControFit/ControlFit.Api/obj/Debug/net8.0/ControlFit.Api.AssemblyInfo.cs
+/Users/nevso/ControFit/ControlFit.Api/obj/Debug/net8.0/ControlFit.Api.MvcApplicationPartsAssemblyInfo.cs
+/Users/nevso/ControFit/ControlFit.Api/appsettings.Development.json
+/Users/nevso/ControFit/ControlFit.Api/appsettings.json
+/Users/nevso/ControFit/ControlFit.Api/ControlFit.Api.http
+/Users/nevso/ControFit/ControlFit.Api/Properties/launchSettings.json

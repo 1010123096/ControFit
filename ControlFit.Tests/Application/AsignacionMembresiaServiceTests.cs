@@ -1,5 +1,6 @@
 using ControlFit.Application.CasosUso.CRUDAsignacion;
 using ControlFit.Application.DTO;
+using ControlFit.Domain;
 using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
 using Moq;
@@ -43,7 +44,7 @@ namespace ControlFit.Tests.Application
             _miembroRepoMock.Setup(x => x.ObtenerPorIdAsync(999)).ReturnsAsync((Miembro?)null);
 
             var dto = new AsignacionMembresiaCrearDTO { MiembroId = 999, MembresiaId = 1 };
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.Crear(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Crear(dto));
 
             Assert.Contains("miembro no existe", ex.Message);
         }
@@ -56,7 +57,7 @@ namespace ControlFit.Tests.Application
             _membresiaRepoMock.Setup(x => x.ObtenerPorIdAsync(999)).ReturnsAsync((Membresia?)null);
 
             var dto = new AsignacionMembresiaCrearDTO { MiembroId = 1, MembresiaId = 999 };
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.Crear(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Crear(dto));
 
             Assert.Contains("membresía no existe", ex.Message);
         }
@@ -72,7 +73,7 @@ namespace ControlFit.Tests.Application
             _repoMock.Setup(x => x.ObtenerActivaAsync(1)).ReturnsAsync(activeAsig);
 
             var dto = new AsignacionMembresiaCrearDTO { MiembroId = 1, MembresiaId = 1 };
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.Crear(dto));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Crear(dto));
 
             Assert.Contains("ya tiene una membresía activa", ex.Message);
         }
@@ -92,7 +93,7 @@ namespace ControlFit.Tests.Application
         {
             _repoMock.Setup(x => x.ObtenerPorIdAsync(999)).ReturnsAsync((AsignacionMembresia?)null);
 
-            var ex = await Assert.ThrowsAsync<Exception>(() => _service.Eliminar(999));
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Eliminar(999));
             Assert.Contains("no existe", ex.Message);
         }
 

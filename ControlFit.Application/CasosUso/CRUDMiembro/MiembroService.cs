@@ -1,6 +1,7 @@
 ﻿using ControlFit.Application.DTO;
 using ControlFit.Application.Repository;
 using ControlFit.Application.Servicios;
+using ControlFit.Domain;
 using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
 using System;
@@ -15,10 +16,9 @@ namespace ControlFit.Application.CasosUso.CRUDMiembro
     public class MiembroService
     {
         private readonly IMiembroRepository _repo;
-        private readonly IGimnasioRepository _gimnasioRepository;
         private readonly IUserContextService _userContext;
 
-        public MiembroService(IMiembroRepository repo, ITokenService tokenService, IUserContextService userContext)
+        public MiembroService(IMiembroRepository repo, IUserContextService userContext)
         {
             _repo = repo;
             _userContext = userContext;
@@ -33,13 +33,13 @@ namespace ControlFit.Application.CasosUso.CRUDMiembro
         {
             // Validar que el usuario es Admin de Gimnasio (no Super Admin)
             if (_userContext.EsSuperAdmin())
-                throw new Exception("Super Admin no puede crear miembros. Asígnese a un gimnasio primero.");
+                throw new DomainException("Super Admin no puede crear miembros. Asígnese a un gimnasio primero.");
 
             var gimnasioId = _userContext.GetGimnasioId();
             
             // Validar que el GimnasioId del DTO coincide con el del usuario
             if (miembroDTO.GimnasioId != gimnasioId)
-                throw new Exception("No tiene permiso para crear miembros en este gimnasio.");
+                throw new DomainException("No tiene permiso para crear miembros en este gimnasio.");
 
             var fechaNac = miembroDTO.FechaNacimiento ?? DateOnly.FromDateTime(DateTime.Today);
             var miembro = new Miembro(miembroDTO.Nombre, miembroDTO.Correo, miembroDTO.Telefono, fechaNac, miembroDTO.GimnasioId);
@@ -75,7 +75,7 @@ namespace ControlFit.Application.CasosUso.CRUDMiembro
                 miembro = await _repo.ObtenerPorIdValidandoGimnasio(id, gimnasioId);
 
             if (miembro == null)
-                throw new Exception("Miembro no encontrado o no tiene permiso para acceder.");
+                throw new DomainException("Miembro no encontrado o no tiene permiso para acceder.");
 
             return miembro;
         }
@@ -94,7 +94,7 @@ namespace ControlFit.Application.CasosUso.CRUDMiembro
                 miembro = await _repo.ObtenerPorIdValidandoGimnasio(id, gimnasioId);
 
             if (miembro == null)
-                throw new Exception("Miembro no encontrado o no tiene permiso para actualizar.");
+                throw new DomainException("Miembro no encontrado o no tiene permiso para actualizar.");
 
             miembro.Actualizar(nombre, correo, telefono);
             return await _repo.ActualizarAsync(miembro);
@@ -114,7 +114,7 @@ namespace ControlFit.Application.CasosUso.CRUDMiembro
                 miembro = await _repo.ObtenerPorIdValidandoGimnasio(id, gimnasioId);
 
             if (miembro == null)
-                throw new Exception("Miembro no encontrado o no tiene permiso para eliminar.");
+                throw new DomainException("Miembro no encontrado o no tiene permiso para eliminar.");
 
             await _repo.EliminarAsync(id);
         }
