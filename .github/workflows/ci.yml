@@ -153,40 +153,38 @@ jobs:
           dotnet build ControlFit.Tests/ControlFit.Tests.csproj --configuration Release --no-restore
 
       - name: Mutation - Domain
-        run: dotnet stryker --config-file "stryker-config-domain.json"
+        run: dotnet stryker --config-file "stryker-config-domain.json" -o "StrykerOutput/domain"
         continue-on-error: true
 
       - name: Mutation - Application
-        run: dotnet stryker --config-file "stryker-config-application.json"
+        run: dotnet stryker --config-file "stryker-config-application.json" -o "StrykerOutput/application"
         continue-on-error: true
 
       - name: Mutation - Infrastructure
-        run: dotnet stryker --config-file "stryker-config-infrastructure.json"
+        run: dotnet stryker --config-file "stryker-config-infrastructure.json" -o "StrykerOutput/infrastructure"
         continue-on-error: true
 
       - name: Mutation - API
-        run: dotnet stryker --config-file "stryker-config-api.json"
+        run: dotnet stryker --config-file "stryker-config-api.json" -o "StrykerOutput/api"
         continue-on-error: true
 
-      - name: Consolidate mutation reports
+      - name: Generate mutation index
         if: always()
         run: |
-          mkdir -p StrykerOutput consolidated-mutation
-          echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Mutation Reports</title></head><body><h1>Mutation Reports</h1><ul>' > consolidated-mutation/index.html
-          for d in $(find . -path '*/StrykerOutput/*' -name 'index.html' -type f 2>/dev/null | sed 's|/index\.html$||'); do
-            name=$(basename "$d")
-            mkdir -p "consolidated-mutation/$name"
-            cp -r "$d/"* "consolidated-mutation/$name/" 2>/dev/null || true
-            echo "<li><a href=\"$name/index.html\">$name</a></li>" >> consolidated-mutation/index.html
-          done
-          echo '</ul></body></html>' >> consolidated-mutation/index.html
+          mkdir -p StrykerOutput
+          cat > StrykerOutput/index.html << 'HTML'
+          <!DOCTYPE html>
+          <meta charset="UTF-8">
+          <meta http-equiv="refresh" content="0;url=domain/index.html">
+          <title>Mutation Reports</title>
+          HTML
 
       - name: Upload mutation reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: mutation-reports
-          path: consolidated-mutation/
+          path: StrykerOutput/
 
   performance:
     name: Performance Tests (k6)
