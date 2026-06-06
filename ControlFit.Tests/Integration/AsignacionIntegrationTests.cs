@@ -90,7 +90,7 @@ namespace ControlFit.Tests.Integration
             await Client.PostAsJsonAsync("api/asignacion", dto);
             var response = await Client.PostAsJsonAsync("api/asignacion", dto);
 
-            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
@@ -106,7 +106,7 @@ namespace ControlFit.Tests.Integration
 
             var response = await Client.PostAsJsonAsync("api/asignacion", dto);
 
-            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
@@ -122,7 +122,7 @@ namespace ControlFit.Tests.Integration
 
             var response = await Client.PostAsJsonAsync("api/asignacion", dto);
 
-            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
@@ -160,7 +160,7 @@ namespace ControlFit.Tests.Integration
             SetAuthToken(GymAdminToken);
             var response = await Client.GetAsync("api/asignacion/9999");
 
-            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]

@@ -119,7 +119,7 @@ namespace ControlFit.Tests.Integration
             };
             var response = await Client.PostAsJsonAsync("api/asignacion", dto);
 
-            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]

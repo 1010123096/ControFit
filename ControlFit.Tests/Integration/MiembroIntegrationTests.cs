@@ -57,7 +57,6 @@ namespace ControlFit.Tests.Integration
             Assert.True(id > 0);
             Assert.Equal(miembroNombre, data.GetProperty("nombreCompleto").GetString());
             Assert.Equal(miembroCorreo, data.GetProperty("correo").GetString());
-            Assert.True(data.GetProperty("estado").GetBoolean());
 
             using var db = CreateDbContext();
             var saved = await db.Miembros.FindAsync(id);

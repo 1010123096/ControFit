@@ -95,12 +95,20 @@ namespace ControlFit.Tests.Integration
         [Fact]
         public async Task Actualizar_ValidData_UpdatesInDb()
         {
+            var originalName = $"Gym To Update {Guid.NewGuid():N}";
+            var createResponse = await Client.PostAsJsonAsync("api/gimnasios/Registro",
+                new GimnasioCrearDTO(originalName, "Original Address"));
+            var createContent = await createResponse.Content.ReadAsStringAsync();
+            var createDoc = System.Text.Json.JsonDocument.Parse(createContent);
+            var gymId = createDoc.RootElement.GetProperty("data").GetProperty("id").GetInt32();
+
             var nuevoNombre = $"Updated Gym {Guid.NewGuid():N}";
             var dto = new GimnasioActualizarDTO
             {
-                Id = GimnasioId,
+                Id = gymId,
                 Nombre = nuevoNombre,
                 Direccion = "Updated Address",
+                Telefono = "555-1234",
                 Estado = true
             };
 
@@ -108,10 +116,11 @@ namespace ControlFit.Tests.Integration
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             using var db = CreateDbContext();
-            var saved = await db.gimnasios.FindAsync(GimnasioId);
+            var saved = await db.gimnasios.FindAsync(gymId);
             Assert.NotNull(saved);
             Assert.Equal(nuevoNombre, saved.Nombre);
             Assert.Equal("Updated Address", saved.Direccion);
+            Assert.Equal("555-1234", saved.Telefono);
             Assert.True(saved.Estado);
         }
 
