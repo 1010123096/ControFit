@@ -171,6 +171,7 @@ jobs:
       - name: Generate mutation index
         if: always()
         run: |
+          mkdir -p StrykerOutput
           cat > StrykerOutput/index.html << 'HTML'
           <!DOCTYPE html>
           <meta charset="UTF-8">
