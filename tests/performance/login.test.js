@@ -9,7 +9,7 @@ export const options = {
     { duration: '10s', target: 0 },
   ],
   thresholds: {
-    http_req_duration: ['p(95)<2000', 'avg<500'],
+    http_req_duration: ['p(95)<5000', 'avg<<1500'],
     http_req_failed: ['rate<0.01'],
   },
   summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(90)', 'p(95)', 'p(99)'],

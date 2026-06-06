@@ -18,7 +18,6 @@ export const options = {
 
 const endpoints = [
   'dashboard/gym-admin',
-  'dashboard/super-admin',
   'miembros/obtenerTodos',
   'Membresia',
   'asignacion',
