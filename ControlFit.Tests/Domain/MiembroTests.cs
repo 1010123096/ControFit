@@ -24,7 +24,7 @@ namespace ControlFit.Tests.Domain
             var miembro = new Miembro();
 
             Assert.Equal(0, miembro.Id);
-            Assert.Null(miembro.Nombre);
+            Assert.Equal("", miembro.Nombre);
         }
 
         [Fact]

@@ -35,7 +35,7 @@ namespace ControlFit.Tests.Domain
             var membresia = new Membresia();
 
             Assert.Equal(0, membresia.Id);
-            Assert.Null(membresia.Nombre);
+            Assert.Equal("", membresia.Nombre);
         }
 
         [Fact]

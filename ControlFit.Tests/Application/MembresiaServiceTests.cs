@@ -165,5 +165,51 @@ namespace ControlFit.Tests.Application
             var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Eliminar(999));
             Assert.Contains("no encontrada", ex.Message);
         }
+
+        [Fact]
+        public async Task Eliminar_AsGymAdmin_CallsObtenerPorIdValidandoGimnasio()
+        {
+            _userContextMock.Setup(x => x.EsSuperAdmin()).Returns(false);
+            _userContextMock.Setup(x => x.GetGimnasioId()).Returns(1);
+            _repoMock.Setup(x => x.ObtenerPorIdValidandoGimnasio(1, 1))
+                .ReturnsAsync(new Membresia("Test", 30, 100));
+
+            await _service.Eliminar(1);
+
+            _repoMock.Verify(x => x.EliminarAsync(1), Times.Once);
+        }
+
+        [Fact]
+        public async Task Actualizar_WithNullDto_ThrowsException()
+        {
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Actualizar(null!));
+            Assert.Contains("obligatorios", ex.Message);
+        }
+
+        [Fact]
+        public async Task Actualizar_NotFound_ThrowsException()
+        {
+            _userContextMock.Setup(x => x.EsSuperAdmin()).Returns(true);
+            _repoMock.Setup(x => x.ObtenerPorIdAsync(999)).ReturnsAsync((Membresia?)null);
+
+            var dto = new ActualizarMembresiaDTO { Id = 999, Nombre = "New" };
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Actualizar(dto));
+            Assert.Contains("no encontrada", ex.Message);
+        }
+
+        [Fact]
+        public async Task Actualizar_AsSuperAdmin_UsesObtenerPorId()
+        {
+            _userContextMock.Setup(x => x.EsSuperAdmin()).Returns(true);
+            _repoMock.Setup(x => x.ObtenerPorIdAsync(1)).ReturnsAsync(
+                new Membresia("Old", 30, 100, 2, 10, 50, true, 1));
+            _repoMock.Setup(x => x.ActualizarAsync(It.IsAny<Membresia>())).ReturnsAsync(true);
+
+            var dto = new ActualizarMembresiaDTO { Id = 1, Nombre = "New" };
+            var result = await _service.Actualizar(dto);
+
+            Assert.True(result);
+            _repoMock.Verify(x => x.ObtenerPorIdAsync(1), Times.Once);
+        }
     }
 }

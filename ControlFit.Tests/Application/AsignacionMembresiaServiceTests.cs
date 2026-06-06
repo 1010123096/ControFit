@@ -89,6 +89,27 @@ namespace ControlFit.Tests.Application
         }
 
         [Fact]
+        public async Task ObtenerPorId_Existing_ReturnsAsignacion()
+        {
+            var membresia = new Membresia("Premium", 30, 99.99);
+            var asig = new AsignacionMembresia(1, membresia);
+            _repoMock.Setup(x => x.ObtenerPorIdAsync(1)).ReturnsAsync(asig);
+
+            var result = await _service.ObtenerPorId(1);
+
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task ObtenerPorId_NonExistent_ThrowsException()
+        {
+            _repoMock.Setup(x => x.ObtenerPorIdAsync(999)).ReturnsAsync((AsignacionMembresia?)null);
+
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.ObtenerPorId(999));
+            Assert.Contains("no existe", ex.Message);
+        }
+
+        [Fact]
         public async Task Eliminar_NonExistent_ThrowsException()
         {
             _repoMock.Setup(x => x.ObtenerPorIdAsync(999)).ReturnsAsync((AsignacionMembresia?)null);
@@ -108,6 +129,18 @@ namespace ControlFit.Tests.Application
             await _service.Eliminar(1);
 
             _repoMock.Verify(x => x.EliminarAsync(1), Times.Once);
+        }
+
+        [Fact]
+        public async Task Eliminar_RepoReturnsFalse_ThrowsException()
+        {
+            var membresia = new Membresia("Premium", 30, 99.99);
+            var asig = new AsignacionMembresia(1, membresia);
+            _repoMock.Setup(x => x.ObtenerPorIdAsync(1)).ReturnsAsync(asig);
+            _repoMock.Setup(x => x.EliminarAsync(1)).ReturnsAsync(false);
+
+            var ex = await Assert.ThrowsAsync<DomainException>(() => _service.Eliminar(1));
+            Assert.Contains("No fue posible eliminar", ex.Message);
         }
     }
 }

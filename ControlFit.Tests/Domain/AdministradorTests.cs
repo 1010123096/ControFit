@@ -59,7 +59,7 @@ namespace ControlFit.Tests.Domain
             var admin = new Administrador();
 
             Assert.Equal(0, admin.Id);
-            Assert.Null(admin.NombreCompleto);
+            Assert.Equal("", admin.NombreCompleto);
         }
     }
 }
