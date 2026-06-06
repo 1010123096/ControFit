@@ -10,9 +10,9 @@ namespace ControlFit.Domain.Entidad
     public class Administrador
     {
         public int Id { get; set; }
-        public string NombreCompleto { get; set; }
-        public string Correo { get; set; }
-        public string Contrasena { get; set; }
+        public string NombreCompleto { get; set; } = string.Empty;
+        public string Correo { get; set; } = string.Empty;
+        public string Contrasena { get; set; } = string.Empty;
         public int? GimnasioId { get; set; }
         public Gimnasio? Gimnasio { get; set; }
 

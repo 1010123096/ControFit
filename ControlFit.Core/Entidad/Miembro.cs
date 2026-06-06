@@ -9,9 +9,9 @@ namespace ControlFit.Domain.Entidad
     public class Miembro
     {
         public int Id { get; set; }
-        public string Nombre { get; set; }
-        public string Correo { get; set; }
-        public string Telefono { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string Correo { get; set; } = string.Empty;
+        public string Telefono { get; set; } = string.Empty;
         public DateOnly FechaNacimiento { get; set; }
         public bool Estado { get; set; }
         public int GimnasioId { get; set; }

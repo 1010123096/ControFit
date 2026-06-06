@@ -43,7 +43,7 @@ namespace ControlFit.Infrastructure.Repository
             }
         }
 
-        public async Task<List<Gimnasio?>> ListarTodos()
+        public async Task<List<Gimnasio>> ListarTodos()
         {
             return await _context.gimnasios.AsNoTracking().ToListAsync();
         }

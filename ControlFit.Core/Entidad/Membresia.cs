@@ -10,7 +10,7 @@ namespace ControlFit.Domain.Entidad
     public class Membresia
     {
         public int Id { get; set; }
-        public string Nombre {  get; set; }
+        public string Nombre { get; set; } = string.Empty;
         public int Duración { get; set; }
         public double Precio { get; set; }
         public int? MaximoIngresosPorDia { get; set; }

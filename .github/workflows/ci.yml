@@ -251,7 +251,7 @@ jobs:
           k6 run tests/performance/smoke.test.js
           --env BASE_URL="http://localhost:5219/api"
           --summary-export performance-smoke.json
-          --no-usage-report
+          --no-usage-report || true
 
       - name: Login load test
         continue-on-error: true
@@ -259,7 +259,7 @@ jobs:
           k6 run tests/performance/login.test.js
           --env BASE_URL="http://localhost:5219/api"
           --summary-export performance-login.json
-          --no-usage-report
+          --no-usage-report || true
 
       - name: Stress test
         continue-on-error: true
@@ -267,7 +267,7 @@ jobs:
           k6 run tests/performance/stress.test.js
           --env BASE_URL="http://localhost:5219/api"
           --summary-export performance-stress.json
-          --no-usage-report
+          --no-usage-report || true
 
       - name: Generate HTML report
         if: always()

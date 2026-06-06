@@ -11,7 +11,7 @@ namespace ControlFit.Application.DTO
     public class MembresiaDTO
     {
         public int Id { get; set; }
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         [JsonPropertyName("duracionDias")]
         public int Duración { get; set; }
@@ -41,7 +41,7 @@ namespace ControlFit.Application.DTO
     // Request DTOs
     public class CrearMembresiaDTO
     {
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         [JsonPropertyName("duracionDias")]
         public int Duración { get; set; }

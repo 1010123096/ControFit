@@ -11,9 +11,9 @@ namespace ControlFit.Application.DTO
     /// </summary>
     public class RegistroAdministradorDTO       
     {
-        public string nombreCompleto { get; set; }
-        public string correo { get; set; }
-        public string contrasena { get; set; }
+        public string nombreCompleto { get; set; } = string.Empty;
+        public string correo { get; set; } = string.Empty;
+        public string contrasena { get; set; } = string.Empty;
         
         /// <summary>
         /// ID del gimnasio asignado al administrador.
@@ -28,8 +28,8 @@ namespace ControlFit.Application.DTO
     /// </summary>
     public class LoginAdministradorDTO
     {
-        public string correo { get; set; }
-        public string contrasena { get; set; }
+        public string correo { get; set; } = string.Empty;
+        public string contrasena { get; set; } = string.Empty;
     }
 
     /// <summary>
@@ -38,9 +38,9 @@ namespace ControlFit.Application.DTO
     public class AdministradorDTO
     {
         public int Id { get; set; }
-        public string NombreCompleto { get; set; }
-        public string Correo { get; set; }
+        public string NombreCompleto { get; set; } = string.Empty;
+        public string Correo { get; set; } = string.Empty;
         public int? GimnasioId { get; set; }
-        public string GimnasioNombre { get; set; }
+        public string GimnasioNombre { get; set; } = string.Empty;
     }
 }

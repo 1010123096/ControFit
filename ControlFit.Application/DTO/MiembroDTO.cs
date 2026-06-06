@@ -12,9 +12,9 @@ namespace ControlFit.Application.DTO
         public int Id { get; set; }
 
         [JsonPropertyName("nombreCompleto")]
-        public string Nombre { get; set; }
-        public string Correo { get; set; }
-        public string Telefono { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string Correo { get; set; } = string.Empty;
+        public string Telefono { get; set; } = string.Empty;
         public DateOnly? FechaNacimiento { get; set; }
         public int GimnasioId { get; set; }
         public string? GimnasioNombre { get; set; }

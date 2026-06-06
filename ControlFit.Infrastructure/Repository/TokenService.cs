@@ -38,7 +38,7 @@ namespace ControlFit.Infrastructure.Repository
             if (!string.IsNullOrEmpty(nombreGimnasio))
                 claims.Add(new Claim("nombreGimnasio", nombreGimnasio));
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"] ?? string.Empty));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(

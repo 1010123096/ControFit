@@ -10,14 +10,14 @@ namespace ControlFit.Application.DTO
 {
     public class GimnasioCrearDTO
     {
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         [JsonIgnore]
         public DateOnly FechaCreacion { get; set; }
 
-        public string Direccion { get; set; }
+        public string Direccion { get; set; } = string.Empty;
 
-        public string Telefono { get; set; }
+        public string Telefono { get; set; } = string.Empty;
 
         public bool Estado { get; set; }
 
@@ -33,11 +33,11 @@ namespace ControlFit.Application.DTO
     public class GimnasioActualizarDTO
     {
         public int Id { get; set; }
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
-        public string Direccion { get; set; }
+        public string Direccion { get; set; } = string.Empty;
 
-        public string Telefono { get; set; }
+        public string Telefono { get; set; } = string.Empty;
 
         public bool Estado { get; set; }
 
