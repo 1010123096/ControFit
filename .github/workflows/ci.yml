@@ -231,6 +231,11 @@ jobs:
             sleep 2
           done
 
+      - name: Seed database
+        run: |
+          echo "Seeding database..."
+          curl -s -X POST http://localhost:5219/api/seed -o /dev/null -w "%{http_code}" || echo "Seed may have partially failed"
+
       - name: Smoke test
         continue-on-error: true
         run: >-

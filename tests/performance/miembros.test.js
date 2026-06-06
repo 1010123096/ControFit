@@ -20,20 +20,18 @@ export default function () {
   const token = loginAsGymAdmin();
   const headers = authHeaders(token);
 
-  // Create
   const nombre = `Test_${randomString(8)}`;
   const payload = JSON.stringify({
-    nombreCompleto: nombre,
+    nombre: nombre,
     correo: `${nombre}@test.com`,
     telefono: '999888777',
     gimnasioId: 1,
+    fechaNacimiento: '1990-01-15',
   });
-  let res = http.post(`${BASE}/miembros`, payload, headers);
-  check(res, { 'crear miembro OK': (r) => r.status === 200 || r.status === 201 });
-  const miembroId = res.json('data.id') || 1;
+  let res = http.post(`${BASE}/miembros/Registro`, payload, headers);
+  check(res, { 'crear miembro OK': (r) => r.status === 200 });
 
-  // Read
-  res = http.get(`${BASE}/miembros`, headers);
+  res = http.get(`${BASE}/miembros/obtenerTodos`, headers);
   check(res, { 'list miembros OK': (r) => r.status === 200 });
 
   sleep(1);
