@@ -33,6 +33,7 @@ namespace ControlFit.Tests.Infrastructure
             Assert.Equal("Admin Gimnasio", claims["role"]);
             Assert.Equal("5", claims["GimnasioId"]);
             Assert.Equal("ControlFit", jwt.Issuer);
+            Assert.Contains("ControlFitApp", jwt.Audiences);
         }
 
         [Fact]
@@ -60,6 +61,102 @@ namespace ControlFit.Tests.Infrastructure
             Assert.True(jwt.ValidFrom <= before.AddMinutes(1));
             Assert.True(jwt.ValidTo >= after.AddHours(6).AddMinutes(-1));
             Assert.True(jwt.ValidTo <= after.AddHours(6).AddMinutes(1));
+        }
+
+        [Fact]
+        public void GenerarToken_WithNombreGimnasio_AddsClaim()
+        {
+            var service = CreateTokenService();
+            var token = service.GenerarToken(1, "admin@test.com", 5, "FitZone");
+
+            var jwt = new JwtSecurityToken(token);
+            var claims = jwt.Claims.ToDictionary(c => c.Type, c => c.Value);
+
+            Assert.Equal("FitZone", claims["nombreGimnasio"]);
+        }
+
+        [Fact]
+        public void GenerarToken_NullNombreGimnasio_DoesNotAddClaim()
+        {
+            var service = CreateTokenService();
+            var token = service.GenerarToken(1, "admin@test.com", 5, null);
+
+            var jwt = new JwtSecurityToken(token);
+
+            Assert.DoesNotContain(jwt.Claims, c => c.Type == "nombreGimnasio");
+        }
+
+        [Fact]
+        public void GenerarToken_EmptyNombreGimnasio_DoesNotAddClaim()
+        {
+            var service = CreateTokenService();
+            var token = service.GenerarToken(1, "admin@test.com", 5, "");
+
+            var jwt = new JwtSecurityToken(token);
+
+            Assert.DoesNotContain(jwt.Claims, c => c.Type == "nombreGimnasio");
+        }
+
+        [Fact]
+        public void GenerarToken_NullGimnasioId_SetsSuperAdminRole()
+        {
+            var service = CreateTokenService();
+            var token = service.GenerarToken(1, "super@test.com");
+
+            var jwt = new JwtSecurityToken(token);
+            var claims = jwt.Claims.ToDictionary(c => c.Type, c => c.Value);
+
+            Assert.Equal("Super Admin", claims["role"]);
+        }
+
+        [Fact]
+        public void GenerarToken_WithGimnasioId_SetsAdminGimnasioRole()
+        {
+            var service = CreateTokenService();
+            var token = service.GenerarToken(1, "admin@test.com", 3);
+
+            var jwt = new JwtSecurityToken(token);
+            var claims = jwt.Claims.ToDictionary(c => c.Type, c => c.Value);
+
+            Assert.Equal("Admin Gimnasio", claims["role"]);
+        }
+
+        [Fact]
+        public void GenerarToken_IssuerAndAudience_AreSet()
+        {
+            var service = CreateTokenService();
+            var token = service.GenerarToken(1, "test@test.com");
+
+            var jwt = new JwtSecurityToken(token);
+
+            Assert.Equal("ControlFit", jwt.Issuer);
+            Assert.Contains("ControlFitApp", jwt.Audiences);
+        }
+
+        [Fact]
+        public void GenerarToken_SubClaim_MatchesAdministradorId()
+        {
+            var service = CreateTokenService();
+            var token = service.GenerarToken(42, "test@test.com");
+
+            var jwt = new JwtSecurityToken(token);
+            var sub = jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub);
+
+            Assert.NotNull(sub);
+            Assert.Equal("42", sub.Value);
+        }
+
+        [Fact]
+        public void GenerarToken_EmailClaim_MatchesCorreo()
+        {
+            var service = CreateTokenService();
+            var token = service.GenerarToken(1, "custom@email.com");
+
+            var jwt = new JwtSecurityToken(token);
+            var email = jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email);
+
+            Assert.NotNull(email);
+            Assert.Equal("custom@email.com", email.Value);
         }
     }
 }

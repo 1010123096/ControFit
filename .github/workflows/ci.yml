@@ -35,18 +35,29 @@ jobs:
         run: dotnet build ControlFit.Api/ControlFit.Api.csproj --no-restore --configuration Release
 
       - name: Run unit tests
-        run: dotnet test ControlFit.Tests/ControlFit.Tests.csproj \
-          --no-restore --configuration Release \
-          --filter "FullyQualifiedName~Domain|FullyQualifiedName~Application|FullyQualifiedName~Api|FullyQualifiedName~Infrastructure" \
-          --logger "trx" \
+        run: >-
+          dotnet test ControlFit.Tests/ControlFit.Tests.csproj
+          --no-restore --configuration Release
+          --filter "FullyQualifiedName~Domain|FullyQualifiedName~Application|FullyQualifiedName~Api|FullyQualifiedName~Infrastructure"
+          --logger "trx;LogFileName=unit-tests.trx"
           --collect:"XPlat Code Coverage"
 
-      - name: Upload coverage
+      - name: Install ReportGenerator
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+      - name: Generate HTML coverage report
+        run: >-
+          reportgenerator
+          -reports:ControlFit.Tests/TestResults/**/coverage.cobertura.xml
+          -targetdir:coverage-report
+          -reporttypes:Html
+
+      - name: Upload coverage report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: backend-coverage
-          path: ControlFit.Tests/TestResults/**/coverage.cobertura.xml
+          name: backend-unit-coverage
+          path: coverage-report/
 
   integration:
     name: Integration Tests
@@ -62,9 +73,7 @@ jobs:
           - 1433:1433
         options: >-
           --health-cmd "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P Test123! -C -Q 'SELECT 1'"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
+          --health-interval 10s --health-timeout 5s --health-retries 10
 
     steps:
       - uses: actions/checkout@v4
@@ -80,14 +89,34 @@ jobs:
           dotnet build ControlFit.Tests/ControlFit.Tests.csproj --configuration Release --no-restore
 
       - name: Run integration tests
-        run: dotnet test ControlFit.Tests/ControlFit.Tests.csproj \
-          --configuration Release --no-restore \
-          --filter "FullyQualifiedName~Integration" \
-          --logger "trx" \
+        run: >-
+          dotnet test ControlFit.Tests/ControlFit.Tests.csproj
+          --configuration Release --no-restore
+          --filter "FullyQualifiedName~Integration"
+          --logger "trx;LogFileName=integration-tests.trx"
           --collect:"XPlat Code Coverage"
         env:
           INTEGRATION_TEST_CONNECTION: >-
             Server=localhost;User Id=sa;Password=Test123!;TrustServerCertificate=true;MultipleActiveResultSets=true
+
+      - name: Install ReportGenerator
+        if: always()
+        run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+      - name: Generate HTML coverage report
+        if: always()
+        run: >-
+          reportgenerator
+          -reports:ControlFit.Tests/TestResults/**/coverage.cobertura.xml
+          -targetdir:coverage-report
+          -reporttypes:Html
+
+      - name: Upload integration coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-integration-coverage
+          path: coverage-report/
 
   mutation:
     name: Mutation Tests
@@ -135,7 +164,9 @@ jobs:
   performance:
     name: Performance Tests (k6)
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_performance == 'true'
+    if: >-
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.run_performance == 'true')
     services:
       sqlserver:
         image: mcr.microsoft.com/mssql/server:2022-latest
@@ -147,9 +178,7 @@ jobs:
           - 1433:1433
         options: >-
           --health-cmd "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P Test123! -C -Q 'SELECT 1'"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 10
+          --health-interval 10s --health-timeout 5s --health-retries 10
 
     steps:
       - uses: actions/checkout@v4
@@ -166,8 +195,7 @@ jobs:
         run: |
           dotnet restore ControlFit.sln
           dotnet build ControlFit.Api/ControlFit.Api.csproj --configuration Release --no-restore
-          dotnet run --project ControlFit.Api/ControlFit.Api.csproj --configuration Release \
-            --urls "http://0.0.0.0:5219" &
+          dotnet run --project ControlFit.Api/ControlFit.Api.csproj --configuration Release --urls "http://0.0.0.0:5219" &
         env:
           ConnectionStrings__DefaultConnection: >-
             Server=localhost;Database=FitControl;User Id=sa;Password=Test123!;TrustServerCertificate=true;MultipleActiveResultSets=true
@@ -176,8 +204,9 @@ jobs:
         run: |
           echo "Waiting for API to start..."
           for i in $(seq 1 30); do
-            if curl -s -o /dev/null -w "%{http_code}" http://localhost:5219/api/auth/login | grep -q "200\|401"; then
-              echo "API ready (HTTP $(curl -s -o /dev/null -w '%{http_code}' http://localhost:5219/api/auth/login))"
+            code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5219/api/auth/login || echo "000")
+            if [ "$code" = "200" ] || [ "$code" = "401" ]; then
+              echo "API ready (HTTP $code)"
               break
             fi
             echo "Waiting... ($i/30)"
@@ -186,23 +215,26 @@ jobs:
 
       - name: Smoke test
         continue-on-error: true
-        run: k6 run tests/performance/smoke.test.js \
-          --env BASE_URL="http://localhost:5219/api" \
-          --summary-export performance-smoke.json \
+        run: >-
+          k6 run tests/performance/smoke.test.js
+          --env BASE_URL="http://localhost:5219/api"
+          --summary-export performance-smoke.json
           --no-usage-report
 
       - name: Login load test
         continue-on-error: true
-        run: k6 run tests/performance/login.test.js \
-          --env BASE_URL="http://localhost:5219/api" \
-          --summary-export performance-login.json \
+        run: >-
+          k6 run tests/performance/login.test.js
+          --env BASE_URL="http://localhost:5219/api"
+          --summary-export performance-login.json
           --no-usage-report
 
       - name: Stress test
         continue-on-error: true
-        run: k6 run tests/performance/stress.test.js \
-          --env BASE_URL="http://localhost:5219/api" \
-          --summary-export performance-stress.json \
+        run: >-
+          k6 run tests/performance/stress.test.js
+          --env BASE_URL="http://localhost:5219/api"
+          --summary-export performance-stress.json
           --no-usage-report
 
       - name: Upload performance reports
@@ -210,5 +242,4 @@ jobs:
         if: always()
         with:
           name: performance-reports
-          path: |
-            performance-*.json
+          path: performance-*.json

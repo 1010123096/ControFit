@@ -254,6 +254,103 @@ namespace ControlFit.Tests.Api
         }
 
         [Fact]
+        public async Task ObtenerTodos_SuperAdmin_ReturnsOk()
+        {
+            var userContextMock = new Mock<IUserContextService>();
+            userContextMock.Setup(x => x.EsAdminGimnasio()).Returns(false);
+            userContextMock.Setup(x => x.EsSuperAdmin()).Returns(true);
+            userContextMock.Setup(x => x.GetGimnasioId()).Returns(0);
+
+            var miembroRepoMock = new Mock<IMiembroRepository>();
+            miembroRepoMock.Setup(x => x.ListarTodos())
+                .ReturnsAsync(new List<Miembro>
+                {
+                    new Miembro("Test1", "t1@t.com", "111", new DateOnly(1990, 1, 1), 1),
+                    new Miembro("Test2", "t2@t.com", "222", new DateOnly(1990, 1, 1), 1)
+                });
+
+            var asigRepoMock = new Mock<IAsignacionMembresiaRepository>();
+            asigRepoMock.Setup(x => x.ObtenerPorMiembroGimnasio(It.IsAny<int>(), 0))
+                .ReturnsAsync(new List<AsignacionMembresia>());
+
+            var asistenciaRepoMock = new Mock<IAsistenciaRepository>();
+            asistenciaRepoMock.Setup(x => x.ObtenerPorMiembroEnRango(It.IsAny<int>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), 0))
+                .ReturnsAsync(new List<Asistencia>());
+
+            var controller = new HistorialController(
+                miembroRepoMock.Object,
+                Mock.Of<IMembresiaRepository>(),
+                asigRepoMock.Object,
+                asistenciaRepoMock.Object,
+                userContextMock.Object);
+
+            var result = await controller.ObtenerTodos() as OkObjectResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task ObtenerTodos_GymAdmin_FiltersByGym()
+        {
+            var userContextMock = new Mock<IUserContextService>();
+            userContextMock.Setup(x => x.EsAdminGimnasio()).Returns(true);
+            userContextMock.Setup(x => x.GetGimnasioId()).Returns(1);
+
+            var miembroRepoMock = new Mock<IMiembroRepository>();
+            miembroRepoMock.Setup(x => x.ListarTodos())
+                .ReturnsAsync(new List<Miembro>
+                {
+                    new Miembro("Gym1Member", "g1@t.com", "111", new DateOnly(1990, 1, 1), 1),
+                    new Miembro("Gym2Member", "g2@t.com", "222", new DateOnly(1990, 1, 1), 2)
+                });
+
+            var asigRepoMock = new Mock<IAsignacionMembresiaRepository>();
+            asigRepoMock.Setup(x => x.ObtenerPorMiembroGimnasio(It.IsAny<int>(), 1))
+                .ReturnsAsync(new List<AsignacionMembresia>());
+
+            var asistenciaRepoMock = new Mock<IAsistenciaRepository>();
+            asistenciaRepoMock.Setup(x => x.ObtenerPorMiembroEnRango(It.IsAny<int>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), 1))
+                .ReturnsAsync(new List<Asistencia>());
+
+            var controller = new HistorialController(
+                miembroRepoMock.Object,
+                Mock.Of<IMembresiaRepository>(),
+                asigRepoMock.Object,
+                asistenciaRepoMock.Object,
+                userContextMock.Object);
+
+            var result = await controller.ObtenerTodos() as OkObjectResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task ObtenerTodos_NoMiembros_ReturnsEmpty()
+        {
+            var userContextMock = new Mock<IUserContextService>();
+            userContextMock.Setup(x => x.EsAdminGimnasio()).Returns(false);
+            userContextMock.Setup(x => x.GetGimnasioId()).Returns(0);
+
+            var miembroRepoMock = new Mock<IMiembroRepository>();
+            miembroRepoMock.Setup(x => x.ListarTodos())
+                .ReturnsAsync(new List<Miembro>());
+
+            var controller = new HistorialController(
+                miembroRepoMock.Object,
+                Mock.Of<IMembresiaRepository>(),
+                Mock.Of<IAsignacionMembresiaRepository>(),
+                Mock.Of<IAsistenciaRepository>(),
+                userContextMock.Object);
+
+            var result = await controller.ObtenerTodos() as OkObjectResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(200, result.StatusCode);
+        }
+
+        [Fact]
         public async Task ObtenerResumenMiembro_WithActiveMembership_ReturnsOk()
         {
             var userContextMock = new Mock<IUserContextService>();
