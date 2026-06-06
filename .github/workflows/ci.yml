@@ -63,28 +63,25 @@ jobs:
         run: |
           COVERAGE_FILE=$(find . -path '*/TestResults/*/coverage.cobertura.xml' | head -1)
           if [ -f "$COVERAGE_FILE" ]; then
-            export COVERAGE_FILE
-            python3 << 'PYEOF'
-import xml.etree.ElementTree as ET, os, sys
-tree = ET.parse(os.environ['COVERAGE_FILE'])
-root = tree.getroot()
-total, covered = 0, 0
-for cls in root.iter('class'):
-    fn = cls.get('filename', '')
-    if '/Migrations' in fn or 'Program.cs' in fn:
-        continue
-    for l in cls.iter('line'):
-        total += 1
-        if l.get('hits') != '0':
-            covered += 1
-pct = covered * 100 / total if total else 0
-msg = '## Backend Code Coverage (app+domain+api)\n| Metric | Value |\n|--------|-------|\n| Lines | **{:.1f}%** ({}/{}) |'.format(pct, covered, total)
-with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
-    f.write(msg + '\n')
-if pct < 75:
-    print('::error::Coverage {:.1f}% is below 75% threshold'.format(pct))
-    sys.exit(1)
-PYEOF
+            python3 -c "import xml.etree.ElementTree as ET, os, sys
+          tree = ET.parse('$COVERAGE_FILE')
+          root = tree.getroot()
+          total, covered = 0, 0
+          for cls in root.iter('class'):
+              fn = cls.get('filename', '')
+              if '/Migrations' in fn or 'Program.cs' in fn:
+                  continue
+              for l in cls.iter('line'):
+                  total += 1
+                  if l.get('hits') != '0':
+                      covered += 1
+          pct = covered * 100 / total if total else 0
+          msg = '## Backend Code Coverage (app+domain+api)\\n| Metric | Value |\\n|--------|-------|\\n| Lines | **{:.1f}%** ({}/{}) |'.format(pct, covered, total)
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as f:
+              f.write(msg + '\\n')
+          if pct < 75:
+              print('::error::Coverage {:.1f}% is below 75% threshold'.format(pct))
+              sys.exit(1)")
           fi
 
       - name: Upload coverage report
