@@ -312,12 +312,8 @@ jobs:
 
       - name: Generate index.html
         run: |
-          echo "=== Mutation debug ==="
-          ls -la reports/mutation/ 2>/dev/null || echo "reports/mutation does not exist"
-          find reports/mutation -name 'index.html' -type f 2>/dev/null || echo "No index.html found"
-          echo "=== End debug ==="
           MUTATION_CARD='<div class="card"><h2>Mutation Tests</h2><p>No mutation report available</p><span class="status missing">N/A</span></div>'
-          MUTATION_FILE=$(find reports/mutation -name 'index.html' -type f 2>/dev/null | head -1)
+          MUTATION_FILE=$(find reports/mutation -name 'mutation-report.html' -type f 2>/dev/null | head -1)
           if [ -n "$MUTATION_FILE" ]; then
             MUTATION_REL=${MUTATION_FILE#reports/}
             MUTATION_CARD='<a class="card" href="'"$MUTATION_REL"'" target="_blank"><h2>Mutation Tests</h2><p>Stryker.NET mutation score report</p><span class="status found">View</span></a>'
