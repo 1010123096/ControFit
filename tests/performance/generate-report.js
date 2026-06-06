@@ -18,56 +18,66 @@ for (const file of summaryFiles) {
   const rows = [];
   const checks = [];
 
+  // Parse all metrics
   if (data.metrics) {
     for (const [key, val] of Object.entries(data.metrics)) {
-      if (key.includes('checks')) continue;
+      const values = val.values || val;
       const rates = [];
-      if (val.rate !== undefined) rates.push({ label: 'Rate', value: (val.rate * 100).toFixed(1) + '%' });
-      if (val.passes !== undefined) rates.push({ label: 'Pass', value: val.passes });
-      if (val.fails !== undefined) rates.push({ label: 'Fail', value: val.fails });
-      if (val.avg !== undefined) rates.push({ label: 'Avg', value: ms(val.avg) });
-      if (val.min !== undefined) rates.push({ label: 'Min', value: ms(val.min) });
-      if (val.max !== undefined) rates.push({ label: 'Max', value: ms(val.max) });
-      if (val.p95 !== undefined) rates.push({ label: 'P95', value: ms(val.p95) });
-      if (val.med !== undefined) rates.push({ label: 'Med', value: ms(val.med) });
-      if (val.count !== undefined && !key.includes('duration')) rates.push({ label: 'Count', value: val.count });
+      
+      // Handle check metrics specially
+      if (key === 'checks' || key.startsWith('check_')) {
+        const passes = values.passes !== undefined ? values.passes : (val.passes || 0);
+        const fails = values.fails !== undefined ? values.fails : (val.fails || 0);
+        if (passes > 0 || fails > 0 || key === 'checks') {
+          checks.push({
+            name: key === 'checks' ? 'All checks' : key.replace(/^check_/, '').replace(/_/g, ' '),
+            passes,
+            fails
+          });
+          allChecks.push({ test: name, name: checks[checks.length - 1].name, passes, fails });
+        }
+        continue;
+      }
+      
+      if (values.rate !== undefined) rates.push({ label: 'Rate', value: (values.rate * 100).toFixed(1) + '%' });
+      if (values.count !== undefined && !key.includes('duration')) rates.push({ label: 'Count', value: values.count });
+      if (values.avg !== undefined) rates.push({ label: 'Avg', value: ms(values.avg) });
+      if (values.min !== undefined) rates.push({ label: 'Min', value: ms(values.min) });
+      if (values.max !== undefined) rates.push({ label: 'Max', value: ms(values.max) });
+      if (values.med !== undefined) rates.push({ label: 'Med', value: ms(values.med) });
+      if (values['p(90)'] !== undefined) rates.push({ label: 'P90', value: ms(values['p(90)']) });
+      if (values['p(95)'] !== undefined) rates.push({ label: 'P95', value: ms(values['p(95)']) });
+      if (values['p(99)'] !== undefined) rates.push({ label: 'P99', value: ms(values['p(99)']) });
+      
       rows.push({ metric: key, rates });
     }
   }
 
-  // Collect checks from k6 summary export
-  // Try nested groups first, then fall back to aggregate metrics
-  function collectChecks(group, prefix) {
-    if (!group) return;
-    const groupName = prefix ? `${prefix} / ${group.name}` : group.name;
-    if (Array.isArray(group.checks)) {
-      for (const check of group.checks) {
-        const fullName = groupName ? `${groupName}: ${check.name}` : check.name;
-        checks.push({ name: fullName, passes: check.passes, fails: check.fails });
-        allChecks.push({ test: name, name: fullName, passes: check.passes, fails: check.fails });
+  // Fallback: try to get checks from root_group if metrics didn't have them
+  if (checks.length === 0 && data.root_group) {
+    function collectChecks(group, prefix) {
+      if (!group) return;
+      const groupName = prefix ? `${prefix} / ${group.name}` : group.name;
+      if (Array.isArray(group.checks)) {
+        for (const check of group.checks) {
+          const fullName = groupName ? `${groupName}: ${check.name}` : check.name;
+          checks.push({ name: fullName, passes: check.passes, fails: check.fails });
+          allChecks.push({ test: name, name: fullName, passes: check.passes, fails: check.fails });
+        }
+      }
+      if (Array.isArray(group.groups)) {
+        for (const g of group.groups) collectChecks(g, groupName);
       }
     }
-    if (Array.isArray(group.groups)) {
-      for (const g of group.groups) collectChecks(g, groupName);
-    }
-  }
-  collectChecks(data.root_group, '');
-
-  // Fallback: read aggregate check metrics
-  if (checks.length === 0 && data.metrics) {
-    const checkMetric = data.metrics.checks;
-    if (checkMetric && checkMetric.values) {
-      const passes = checkMetric.values.passes || 0;
-      const fails = checkMetric.values.fails || 0;
-      if (passes > 0 || fails > 0) {
-        checks.push({ name: 'All checks', passes, fails });
-        allChecks.push({ test: name, name: 'All checks', passes, fails });
-      }
-    }
+    collectChecks(data.root_group, '');
   }
 
   metrics.push({ name, rows, checks });
 }
+
+const totalPassed = allChecks.reduce((sum, c) => sum + c.passes, 0);
+const totalFailed = allChecks.reduce((sum, c) => sum + c.fails, 0);
+const totalChecks = allChecks.length;
 
 const html = `<!DOCTYPE html>
 <html lang="en">
@@ -114,9 +124,9 @@ const html = `<!DOCTYPE html>
 const metrics = ${JSON.stringify(metrics)};
 const allChecks = ${JSON.stringify(allChecks)};
 
-const totalPassed = allChecks.filter(c => c.fails === 0).length;
-const totalFailed = allChecks.filter(c => c.fails > 0).length;
-const totalChecks = allChecks.length;
+const totalPassed = ${totalPassed};
+const totalFailed = ${totalFailed};
+const totalChecks = ${totalChecks};
 
 const summaryHtml = \`
   <div class="card"><h3>Tests</h3><div class="value">\${metrics.length}</div></div>
@@ -160,7 +170,7 @@ fs.writeFileSync(outFile, html);
 console.log(`Report generated: ${outFile}`);
 
 function ms(v) {
-  if (v === undefined) return '-';
+  if (v === undefined || v === null) return '-';
   if (v < 1000) return v.toFixed(1) + 'ms';
   if (v < 60000) return (v / 1000).toFixed(2) + 's';
   return (v / 60000).toFixed(1) + 'm';
