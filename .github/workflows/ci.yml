@@ -63,7 +63,7 @@ jobs:
         run: |
           COVERAGE_FILE=$(find . -path '*/TestResults/*/coverage.cobertura.xml' | head -1)
           if [ -f "$COVERAGE_FILE" ]; then
-            python3 -c "import xml.etree.ElementTree as ET, os, sys; t=ET.parse(os.environ['COVERAGE_FILE']); r=t.getroot(); pairs=[(c.get('filename',''),l) for c in r.iter('class') for l in c.iter('line')]; pairs=[(fn,l) for fn,l in pairs if '/Migrations' not in fn and 'Program.cs' not in fn]; tc=len(pairs); cc=sum(1 for _,l in pairs if l.get('hits')!='0'); p=cc*100/tc if tc else 0; m='## Backend Code Coverage (app+domain+api)\n| Metric | Value |\n|--------|-------|\n| Lines | **'+format(p,'.1f')+'%** ('+str(cc)+'/'+str(tc)+') |'; open(os.environ['GITHUB_STEP_SUMMARY'],'a').write(m+'\n'); print('::error::Coverage '+format(p,'.1f')+'% is below 75% threshold') if p<75 else None; exit(1 if p<75 else 0)"
+            export COVERAGE_FILE; python3 -c "import xml.etree.ElementTree as ET, os, sys; t=ET.parse(os.environ['COVERAGE_FILE']); r=t.getroot(); pairs=[(c.get('filename',''),l) for c in r.iter('class') for l in c.iter('line')]; pairs=[(fn,l) for fn,l in pairs if '/Migrations' not in fn and 'Program.cs' not in fn]; tc=len(pairs); cc=sum(1 for _,l in pairs if l.get('hits')!='0'); p=cc*100/tc if tc else 0; m='## Backend Code Coverage (app+domain+api)\n| Metric | Value |\n|--------|-------|\n| Lines | **'+format(p,'.1f')+'%** ('+str(cc)+'/'+str(tc)+') |'; open(os.environ['GITHUB_STEP_SUMMARY'],'a').write(m+'\n'); print('::error::Coverage '+format(p,'.1f')+'% is below 75% threshold') if p<75 else None; exit(1 if p<75 else 0)"
           fi
 
       - name: Upload coverage report
