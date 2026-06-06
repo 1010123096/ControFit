@@ -57,6 +57,7 @@ jobs:
           -reports:ControlFit.Tests/TestResults/**/coverage.cobertura.xml
           -targetdir:coverage-report
           -reporttypes:Html
+          -filefilters:-**/Migrations/**;-**/Program.cs
 
       - name: Coverage summary
         if: always()
@@ -124,6 +125,7 @@ jobs:
           -reports:ControlFit.Tests/TestResults/**/coverage.cobertura.xml
           -targetdir:coverage-report
           -reporttypes:Html
+          -filefilters:-**/Migrations/**;-**/Program.cs
 
       - name: Upload integration coverage
         uses: actions/upload-artifact@v4
@@ -324,7 +326,7 @@ jobs:
       - name: Generate index.html
         run: |
           MUTATION_CARD='<div class="card"><h2>Mutation Tests</h2><p>No mutation report available</p><span class="status missing">N/A</span></div>'
-          MUTATION_FILE=$(find reports/mutation -name 'index.html' -path '*/StrykerOutput/*' 2>/dev/null | head -1)
+          MUTATION_FILE=$(find reports/mutation -name 'index.html' 2>/dev/null | head -1)
           if [ -n "$MUTATION_FILE" ]; then
             MUTATION_REL=${MUTATION_FILE#reports/}
             MUTATION_CARD='<a class="card" href="'"$MUTATION_REL"'" target="_blank"><h2>Mutation Tests</h2><p>Stryker.NET mutation score report</p><span class="status found">View</span></a>'
