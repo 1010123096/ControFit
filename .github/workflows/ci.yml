@@ -168,6 +168,20 @@ jobs:
         run: dotnet stryker --config-file "stryker-config-api.json"
         continue-on-error: true
 
+      - name: Generate mutation index
+        if: always()
+        run: |
+          cat > StrykerOutput/index.html << 'HTML'
+          <!DOCTYPE html>
+          <meta charset="UTF-8">
+          <meta http-equiv="refresh" content="0;url=domain/index.html">
+          <title>Mutation Reports</title>
+          <p><a href="domain/index.html">Domain</a></p>
+          <p><a href="application/index.html">Application</a></p>
+          <p><a href="infrastructure/index.html">Infrastructure</a></p>
+          <p><a href="api/index.html">API</a></p>
+          HTML
+
       - name: Upload mutation reports
         uses: actions/upload-artifact@v4
         if: always()

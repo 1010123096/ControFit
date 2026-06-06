@@ -9,6 +9,7 @@
       "low": 20
     },
     "reporters": ["html", "json", "cleartext"],
+    "output-path": "StrykerOutput/infrastructure",
     "test-case-filter": "FullyQualifiedName~Infrastructure|FullyQualifiedName~Application|FullyQualifiedName~Domain",
     "verbosity": "info",
     "concurrency": 4
