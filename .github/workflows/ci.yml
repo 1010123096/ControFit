@@ -57,7 +57,7 @@ jobs:
           -reports:ControlFit.Tests/TestResults/**/coverage.cobertura.xml
           -targetdir:coverage-report
           -reporttypes:Html
-          -filefilters:-**/Migrations/**;-**/Program.cs
+          -filefilters:-**/Migrations/**,-**/Program.cs
 
       - name: Coverage summary
         if: always()
@@ -125,7 +125,7 @@ jobs:
           -reports:ControlFit.Tests/TestResults/**/coverage.cobertura.xml
           -targetdir:coverage-report
           -reporttypes:Html
-          -filefilters:-**/Migrations/**;-**/Program.cs
+          -filefilters:-**/Migrations/**,-**/Program.cs
 
       - name: Upload integration coverage
         uses: actions/upload-artifact@v4
