@@ -1,4 +1,5 @@
 using ControlFit.Application.Servicios;
+using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -61,9 +62,10 @@ namespace ControlFit.Api.Controllers
                 var historial = new List<dynamic>();
                 foreach (var m in miembros)
                 {
-                    var asignaciones = await _asignacionRepository.ObtenerPorMiembroGimnasio(m.Id, gimnasioId);
+                    var scopeGimnasioId = _userContext.EsAdminGimnasio() ? gimnasioId : m.GimnasioId;
+                    var asignaciones = await _asignacionRepository.ObtenerPorMiembroGimnasio(m.Id, scopeGimnasioId);
                     var asistencias = await _asistenciaRepository.ObtenerPorMiembroEnRango(
-                        m.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddDays(1), gimnasioId);
+                        m.Id, DateTime.Now.AddMonths(-1), DateTime.Now.AddDays(1), scopeGimnasioId);
 
                     foreach (var a in asignaciones)
                     {
@@ -118,22 +120,22 @@ namespace ControlFit.Api.Controllers
 
                 var gimnasioId = _userContext.GetGimnasioId();
 
-                // Validar permiso para ver el historial del miembro
+                Miembro? miembro;
                 if (_userContext.EsAdminGimnasio())
                 {
-                    var miembro = await _miembroRepository.ObtenerPorIdValidandoGimnasio(miembroId, gimnasioId);
+                    miembro = await _miembroRepository.ObtenerPorIdValidandoGimnasio(miembroId, gimnasioId);
                     if (miembro == null)
                         return Unauthorized(new { error = SinPermisoHistorial });
                 }
                 else
                 {
-                    var miembro = await _miembroRepository.ObtenerPorIdAsync(miembroId);
+                    miembro = await _miembroRepository.ObtenerPorIdAsync(miembroId);
                     if (miembro == null)
                         return NotFound(new { error = MiembroNoEncontrado });
                 }
 
-                // Obtener asignaciones del miembro
-                var asignaciones = await _asignacionRepository.ObtenerPorMiembroGimnasio(miembroId, gimnasioId);
+                var scopeGimnasioId = _userContext.EsAdminGimnasio() ? gimnasioId : miembro.GimnasioId;
+                var asignaciones = await _asignacionRepository.ObtenerPorMiembroGimnasio(miembroId, scopeGimnasioId);
 
                 var historialMembresias = new List<dynamic>();
                 foreach (var asignacion in asignaciones)
@@ -182,21 +184,22 @@ namespace ControlFit.Api.Controllers
 
                 var gimnasioId = _userContext.GetGimnasioId();
 
-                // Validar permiso
+                Miembro? miembro;
                 if (_userContext.EsAdminGimnasio())
                 {
-                    var miembro = await _miembroRepository.ObtenerPorIdValidandoGimnasio(miembroId, gimnasioId);
+                    miembro = await _miembroRepository.ObtenerPorIdValidandoGimnasio(miembroId, gimnasioId);
                     if (miembro == null)
                         return Unauthorized(new { error = SinPermisoHistorial });
                 }
                 else
                 {
-                    var miembro = await _miembroRepository.ObtenerPorIdAsync(miembroId);
+                    miembro = await _miembroRepository.ObtenerPorIdAsync(miembroId);
                     if (miembro == null)
                         return NotFound(new { error = MiembroNoEncontrado });
                 }
 
-                var asignaciones = await _asignacionRepository.ObtenerPorMiembroGimnasio(miembroId, gimnasioId);
+                var scopeGimnasioId = _userContext.EsAdminGimnasio() ? gimnasioId : miembro.GimnasioId;
+                var asignaciones = await _asignacionRepository.ObtenerPorMiembroGimnasio(miembroId, scopeGimnasioId);
 
                 var historialAsignaciones = asignaciones.Select(a => new
                 {
@@ -239,19 +242,21 @@ namespace ControlFit.Api.Controllers
 
                 var gimnasioId = _userContext.GetGimnasioId();
 
-                // Validar permiso
+                Miembro? miembro;
                 if (_userContext.EsAdminGimnasio())
                 {
-                    var miembro = await _miembroRepository.ObtenerPorIdValidandoGimnasio(miembroId, gimnasioId);
+                    miembro = await _miembroRepository.ObtenerPorIdValidandoGimnasio(miembroId, gimnasioId);
                     if (miembro == null)
                         return Unauthorized(new { error = SinPermisoHistorial });
                 }
                 else
                 {
-                    var miembro = await _miembroRepository.ObtenerPorIdAsync(miembroId);
+                    miembro = await _miembroRepository.ObtenerPorIdAsync(miembroId);
                     if (miembro == null)
                         return NotFound(new { error = MiembroNoEncontrado });
                 }
+
+                var scopeGimnasioId = _userContext.EsAdminGimnasio() ? gimnasioId : miembro.GimnasioId;
 
                 // Establecer rango de fechas
                 var inicio = fechaInicio ?? DateTime.Now.AddMonths(-1);
@@ -261,7 +266,7 @@ namespace ControlFit.Api.Controllers
                     miembroId,
                     inicio,
                     fin,
-                    gimnasioId
+                    scopeGimnasioId
                 );
 
                 var historialAsistencias = asistencias
@@ -354,7 +359,7 @@ namespace ControlFit.Api.Controllers
                     miembroId,
                     DateTime.Now.AddDays(-7),
                     DateTime.Now.AddDays(1),
-                    gimnasioId
+                    miembro.GimnasioId
                 );
 
                 return Ok(new

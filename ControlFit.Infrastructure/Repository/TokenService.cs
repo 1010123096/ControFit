@@ -1,18 +1,14 @@
 ﻿using ControlFit.Application.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ControlFit.Infrastructure.Repository
 {
     public class TokenService : ITokenService
-
     {
         private readonly IConfiguration _config;
 
@@ -31,7 +27,6 @@ namespace ControlFit.Infrastructure.Repository
                 new Claim(JwtRegisteredClaimNames.Sub, administradorId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, correo),
                 new Claim("role", role),
-                // GimnasioId: null = Super Admin, > 0 = Admin de Gimnasio
                 new Claim("GimnasioId", (gimnasioId ?? 0).ToString())
             };
 
@@ -50,6 +45,12 @@ namespace ControlFit.Infrastructure.Repository
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string GenerarRefreshToken()
+        {
+            var bytes = RandomNumberGenerator.GetBytes(64);
+            return Convert.ToBase64String(bytes);
         }
     }
 }

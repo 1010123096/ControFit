@@ -73,5 +73,29 @@ namespace ControlFit.Infrastructure.Repository
                 .AsNoTracking()
                 .ToListAsync();
         }
+
+        public async Task<int[]> ObtenerConteoDiarioUltimos7DiasPorGimnasio(int gimnasioId)
+        {
+            var inicio = DateTime.Today.AddDays(-6);
+            var fin = DateTime.Today.AddDays(1);
+
+            var asistencias = await (from asistencia in _context.Asistencias
+                                     join miembro in _context.Miembros on asistencia.MiembroId equals miembro.Id
+                                     where miembro.GimnasioId == gimnasioId
+                                           && asistencia.FechaHoraAcceso >= inicio
+                                           && asistencia.FechaHoraAcceso < fin
+                                     select asistencia.FechaHoraAcceso)
+                .ToListAsync();
+
+            var conteos = new int[7];
+            for (var i = 0; i < 7; i++)
+            {
+                var dia = inicio.AddDays(i);
+                var diaSiguiente = dia.AddDays(1);
+                conteos[i] = asistencias.Count(f => f >= dia && f < diaSiguiente);
+            }
+
+            return conteos;
+        }
     }
 }

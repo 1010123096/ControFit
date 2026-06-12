@@ -24,9 +24,20 @@ namespace ControlFit.Infrastructure.Repository
             return await _context.Administradores.Include(a => a.Gimnasio).FirstOrDefaultAsync(a => a.Correo == correo);
         }
 
+        public async Task<Administrador?> ObtenerPorIdAsync(int id)
+        {
+            return await _context.Administradores.Include(a => a.Gimnasio).FirstOrDefaultAsync(a => a.Id == id);
+        }
+
         public async Task GuardarAsync(Administrador admin)
         {
             _context.Administradores.Add(admin);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ActualizarAsync(Administrador admin)
+        {
+            _context.Administradores.Update(admin);
             await _context.SaveChangesAsync();
         }
 

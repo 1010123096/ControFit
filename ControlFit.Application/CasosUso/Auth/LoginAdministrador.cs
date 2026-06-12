@@ -1,42 +1,65 @@
 ﻿using ControlFit.Application.DTO;
 using ControlFit.Application.Repository;
+using ControlFit.Application.Servicios;
+using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 namespace ControlFit.Application.CasosUso.Auth
 {
-    /// <summary>
-    /// Caso de uso para autenticar administrador y generar JWT token.
-    /// Incluye el GimnasioId en el token para diferencia entre Super Admin y Admin de Gimnasio.
-    /// </summary>
     public class LoginAdministrador
     {
         private readonly IAdministradorRepository _repo;
         private readonly ITokenService _tokenService;
+        private readonly IRefreshTokenRepository _refreshTokenRepository;
+        private readonly AuditService _auditService;
 
-        public LoginAdministrador(IAdministradorRepository repo, ITokenService tokenService)
+        public LoginAdministrador(
+            IAdministradorRepository repo,
+            ITokenService tokenService,
+            IRefreshTokenRepository refreshTokenRepository,
+            AuditService auditService)
         {
             _repo = repo;
             _tokenService = tokenService;
+            _refreshTokenRepository = refreshTokenRepository;
+            _auditService = auditService;
         }
 
-        /// <summary>
-        /// Ejecuta el login del administrador.
-        /// Retorna el token JWT si las credenciales son válidas.
-        /// </summary>
-        public async Task<string?> EjecutarAsyncLogin(LoginAdministradorDTO dto)
+        public async Task<AuthTokenResponseDTO?> EjecutarAsyncLogin(LoginAdministradorDTO dto)
         {
             var administrador = await _repo.ObtenerPorCorreoAsync(dto.correo);
             if (administrador == null || !administrador.ValidarPassword(dto.contrasena))
+            {
+                if (administrador != null)
+                    await _auditService.RegistrarLoginAsync(administrador.Id, administrador.GimnasioId, false);
                 return null;
+            }
 
-            // Generar token incluyendo GimnasioId (null = Super Admin) y nombre del gimnasio
             var nombreGimnasio = administrador.Gimnasio?.Nombre;
-            return _tokenService.GenerarToken(administrador.Id, administrador.Correo, administrador.GimnasioId, nombreGimnasio);
+            var accessToken = _tokenService.GenerarToken(
+                administrador.Id,
+                administrador.Correo,
+                administrador.GimnasioId,
+                nombreGimnasio);
+
+            var refreshToken = _tokenService.GenerarRefreshToken();
+            await _refreshTokenRepository.CrearAsync(new RefreshToken
+            {
+                AdministradorId = administrador.Id,
+                TokenHash = RefreshTokenAdministrador.HashToken(refreshToken),
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(7)
+            });
+
+            await _auditService.RegistrarLoginAsync(administrador.Id, administrador.GimnasioId, true);
+
+            return new AuthTokenResponseDTO
+            {
+                Token = accessToken,
+                RefreshToken = refreshToken,
+                ExpiresAt = DateTime.UtcNow.AddHours(6)
+            };
         }
     }
 }

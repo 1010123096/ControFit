@@ -101,5 +101,20 @@ namespace ControlFit.Tests.Integration
             var json = JsonSerializer.Serialize(obj, JsonOptions);
             return new StringContent(json, Encoding.UTF8, "application/json");
         }
+
+        protected async Task<HttpResponseMessage> PostRegistroAsync(RegistroAdministradorDTO dto, string? token = null)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, "api/auth/registro")
+            {
+                Content = ToJsonContent(dto)
+            };
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            return await Client.SendAsync(request);
+        }
     }
 }

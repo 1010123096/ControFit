@@ -30,5 +30,10 @@ namespace ControlFit.Domain.Interfaz_puertos_
         /// Obtiene las asistencias de un miembro en un rango de fechas y gimnasio.
         /// </summary>
         Task<List<Asistencia>> ObtenerPorMiembroEnRango(int miembroId, DateTime fechaInicio, DateTime fechaFin, int gimnasioId);
+
+        /// <summary>
+        /// Conteo diario de asistencias de los últimos 7 días (incluye hoy) para un gimnasio.
+        /// </summary>
+        Task<int[]> ObtenerConteoDiarioUltimos7DiasPorGimnasio(int gimnasioId);
     }
 }

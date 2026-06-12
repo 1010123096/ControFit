@@ -30,7 +30,7 @@ namespace ControlFit.Tests.Integration
                 contrasena = "Password123",
                 GimnasioId = newGymId
             };
-            var adminResponse = await Client.PostAsJsonAsync("api/auth/registro", adminDto);
+            var adminResponse = await PostRegistroAsync(adminDto, SuperAdminToken);
             Assert.Equal(HttpStatusCode.OK, adminResponse.StatusCode);
 
             // 3. Login as the new gym admin
@@ -219,7 +219,7 @@ namespace ControlFit.Tests.Integration
                 contrasena = "Test123456",
                 GimnasioId = otherGymId
             };
-            await Client.PostAsJsonAsync("api/auth/registro", adminRegDto);
+            await PostRegistroAsync(adminRegDto, SuperAdminToken);
 
             // 4. Login as the other gym admin and create a member there
             var loginDto = new LoginAdministradorDTO { correo = otherAdminEmail, contrasena = "Test123456" };

@@ -54,12 +54,17 @@ namespace ControlFit.Application.CasosUso.Dashboard
 
             var membresiasVencidas = asignaciones.Count(a => !a.EstaVigente());
 
+            var asistenciasSemanales = gimnasioId > 0
+                ? await _asistenciaRepo.ObtenerConteoDiarioUltimos7DiasPorGimnasio(gimnasioId)
+                : new int[7];
+
             return new GymAdminDashboardDTO
             {
                 TotalMiembros = miembros.Count,
                 MiembrosActivos = miembrosActivos.Count,
                 MembresiasVencidas = membresiasVencidas,
-                AsistenciasHoy = asistenciasHoy
+                AsistenciasHoy = asistenciasHoy,
+                AsistenciasSemanales = asistenciasSemanales.ToList()
             };
         }
 
@@ -84,6 +89,7 @@ namespace ControlFit.Application.CasosUso.Dashboard
         public int MiembrosActivos { get; set; }
         public int MembresiasVencidas { get; set; }
         public int AsistenciasHoy { get; set; }
+        public List<int> AsistenciasSemanales { get; set; } = new();
     }
 
     public class SuperAdminDashboardDTO

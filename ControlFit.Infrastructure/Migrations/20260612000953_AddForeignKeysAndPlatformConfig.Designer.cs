@@ -4,6 +4,7 @@ using ControlFit.Infrastructure.Persistencia;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControlFit.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260612000953_AddForeignKeysAndPlatformConfig")]
+    partial class AddForeignKeysAndPlatformConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,14 +104,8 @@ namespace ControlFit.Infrastructure.Migrations
                     b.Property<int>("AsignacionMembresiaId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("BiometricEventId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("FechaHoraAcceso")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("Fuente")
-                        .HasColumnType("int");
 
                     b.Property<int>("MiembroId")
                         .HasColumnType("int");
@@ -120,156 +117,6 @@ namespace ControlFit.Infrastructure.Migrations
                     b.HasIndex("MiembroId");
 
                     b.ToTable("Asistencia", (string)null);
-                });
-
-            modelBuilder.Entity("ControlFit.Domain.Entidad.AuditLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Accion")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int?>("AdministradorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Detalle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Entidad")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("EntidadId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("FechaUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("GimnasioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FechaUtc");
-
-                    b.ToTable("AuditLog", (string)null);
-                });
-
-            modelBuilder.Entity("ControlFit.Domain.Entidad.BiometricDevice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("GimnasioId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("LastSyncAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SerialNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GimnasioId", "SerialNumber")
-                        .IsUnique();
-
-                    b.ToTable("BiometricDevice", (string)null);
-                });
-
-            modelBuilder.Entity("ControlFit.Domain.Entidad.BiometricEvent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("AsistenciaId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("DeviceId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EventAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EventType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ExternalEventId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ExternalUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("GimnasioId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MiembroId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProcessingStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ReceivedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GimnasioId", "ExternalEventId")
-                        .IsUnique();
-
-                    b.ToTable("BiometricEvent", (string)null);
-                });
-
-            modelBuilder.Entity("ControlFit.Domain.Entidad.BiometricUserMapping", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ExternalUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("GimnasioId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MiembroId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GimnasioId", "ExternalUserId")
-                        .IsUnique();
-
-                    b.ToTable("BiometricUserMapping", (string)null);
                 });
 
             modelBuilder.Entity("ControlFit.Domain.Entidad.ConfiguracionPlataforma", b =>
@@ -405,43 +252,6 @@ namespace ControlFit.Infrastructure.Migrations
                     b.HasIndex("GimnasioId");
 
                     b.ToTable("Miembro", (string)null);
-                });
-
-            modelBuilder.Entity("ControlFit.Domain.Entidad.RefreshToken", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AdministradorId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ReplacedByTokenHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RevokedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TokenHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdministradorId");
-
-                    b.HasIndex("TokenHash")
-                        .IsUnique();
-
-                    b.ToTable("RefreshToken", (string)null);
                 });
 
             modelBuilder.Entity("ControlFit.Domain.Entidad.Administrador", b =>

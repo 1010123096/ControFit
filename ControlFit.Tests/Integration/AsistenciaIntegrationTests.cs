@@ -154,13 +154,13 @@ namespace ControlFit.Tests.Integration
             var otherGymId = otherGymDoc.RootElement.GetProperty("data").GetProperty("id").GetInt32();
 
             var otherAdminEmail = $"other.asistencia.{Guid.NewGuid():N}@test.com";
-            await Client.PostAsJsonAsync("api/auth/registro", new RegistroAdministradorDTO
+            await PostRegistroAsync(new RegistroAdministradorDTO
             {
                 nombreCompleto = "Other Gym Asistencia Admin",
                 correo = otherAdminEmail,
                 contrasena = "Test123456",
                 GimnasioId = otherGymId
-            });
+            }, SuperAdminToken);
 
             var loginResponse = await Client.PostAsJsonAsync("api/auth/login",
                 new LoginAdministradorDTO { correo = otherAdminEmail, contrasena = "Test123456" });

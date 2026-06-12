@@ -10,6 +10,22 @@ namespace ControlFit.Tests.Integration
         public AuthIntegrationTests(ControlFitApiFactory factory) : base(factory) { }
 
         [Fact]
+        public async Task Registrar_WithoutToken_ReturnsUnauthorized()
+        {
+            var dto = new RegistroAdministradorDTO
+            {
+                nombreCompleto = "New Super Admin",
+                correo = $"new.super.{Guid.NewGuid():N}@test.com",
+                contrasena = "Password123",
+                GimnasioId = null
+            };
+
+            var response = await PostRegistroAsync(dto);
+
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+
+        [Fact]
         public async Task Registrar_ValidSuperAdmin_ReturnsOk()
         {
             var dto = new RegistroAdministradorDTO
@@ -20,7 +36,7 @@ namespace ControlFit.Tests.Integration
                 GimnasioId = null
             };
 
-            var response = await Client.PostAsJsonAsync("api/auth/registro", dto);
+            var response = await PostRegistroAsync(dto, SuperAdminToken);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             var message = await GetResponseMessage(response);
@@ -38,7 +54,7 @@ namespace ControlFit.Tests.Integration
                 GimnasioId = GimnasioId
             };
 
-            var response = await Client.PostAsJsonAsync("api/auth/registro", dto);
+            var response = await PostRegistroAsync(dto, SuperAdminToken);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
@@ -54,7 +70,7 @@ namespace ControlFit.Tests.Integration
                 contrasena = "Password123",
                 GimnasioId = null
             };
-            await Client.PostAsJsonAsync("api/auth/registro", dto1);
+            await PostRegistroAsync(dto1, SuperAdminToken);
 
             var dto2 = new RegistroAdministradorDTO
             {
@@ -63,9 +79,9 @@ namespace ControlFit.Tests.Integration
                 contrasena = "Password123",
                 GimnasioId = null
             };
-            var response = await Client.PostAsJsonAsync("api/auth/registro", dto2);
+            var response = await PostRegistroAsync(dto2, SuperAdminToken);
 
-            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
@@ -79,9 +95,9 @@ namespace ControlFit.Tests.Integration
                 GimnasioId = null
             };
 
-            var response = await Client.PostAsJsonAsync("api/auth/registro", dto);
+            var response = await PostRegistroAsync(dto, SuperAdminToken);
 
-            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
@@ -95,9 +111,9 @@ namespace ControlFit.Tests.Integration
                 GimnasioId = null
             };
 
-            var response = await Client.PostAsJsonAsync("api/auth/registro", dto);
+            var response = await PostRegistroAsync(dto, SuperAdminToken);
 
-            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]

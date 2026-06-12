@@ -2,21 +2,9 @@
 using ControlFit.Domain;
 using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ControlFit.Application.CasosUso.Ingreso
 {
-    /// <summary>
-    /// Caso de uso para registrar el ingreso de un miembro al gimnasio.
-    /// Valida:
-    /// 1. La membresía está asignada y vigente
-    /// 2. El miembro no ha ingresado hoy
-    /// 3. Límites de ingreso por semana no sean excedidos
-    /// </summary>
     public class RegistrarIngreso
     {
         private readonly IAsistenciaRepository _asistenciaRepository;
@@ -24,29 +12,28 @@ namespace ControlFit.Application.CasosUso.Ingreso
         private readonly IMembresiaRepository _membresiaRepository;
         private readonly IMiembroRepository _miembroRepository;
         private readonly IUserContextService _userContext;
+        private readonly AuditService _auditService;
 
         public RegistrarIngreso(
             IAsistenciaRepository asistenciaRepository,
             IAsignacionMembresiaRepository asignacionRepository,
             IMembresiaRepository membresiaRepository,
             IMiembroRepository miembroRepository,
-            IUserContextService userContext)
+            IUserContextService userContext,
+            AuditService auditService)
         {
             _asistenciaRepository = asistenciaRepository;
             _asignacionRepository = asignacionRepository;
             _membresiaRepository = membresiaRepository;
             _miembroRepository = miembroRepository;
             _userContext = userContext;
+            _auditService = auditService;
         }
 
-        /// <summary>
-        /// Registra el ingreso de un miembro validando permisos y restricciones.
-        /// </summary>
-        public async Task EjecutarAsync(int miembroId)
+        public async Task EjecutarAsync(int miembroId, FuenteAsistencia fuente = FuenteAsistencia.Manual, int? biometricEventId = null)
         {
             var gimnasioId = _userContext.GetGimnasioId();
 
-            // Validar que el miembro pertenece al gimnasio del usuario (si no es Super Admin)
             if (_userContext.EsAdminGimnasio())
             {
                 var miembro = await _miembroRepository.ObtenerPorIdValidandoGimnasio(miembroId, gimnasioId);
@@ -55,28 +42,32 @@ namespace ControlFit.Application.CasosUso.Ingreso
             }
 
             var asignacion = await _asignacionRepository.ObtenerActivaAsync(miembroId);
-
             if (asignacion == null || !asignacion.EstaVigente())
                 throw new DomainException("Membresía vencida");
 
-            var yaIngreso = await _asistenciaRepository.YaIngresoHoyAsync(miembroId);
-
-            if (yaIngreso)
+            if (await _asistenciaRepository.YaIngresoHoyAsync(miembroId))
                 throw new DomainException("El miembro ya ingresó hoy");
 
             var membresia = await _membresiaRepository.ObtenerPorIdAsync(asignacion.MembresiaId);
-
             var ingresosSemana = await _asistenciaRepository.ObtenerIngresosSemanaAsync(miembroId);
 
-            if (membresia.MaximoIngresosPorSemana.HasValue &&
+            if (membresia?.MaximoIngresosPorSemana.HasValue == true &&
                 ingresosSemana >= membresia.MaximoIngresosPorSemana.Value)
             {
                 throw new DomainException("Límite semanal alcanzado");
             }
 
-            var asistencia = new Asistencia(miembroId, asignacion.Id);
+            if (fuente == FuenteAsistencia.Biometrica && !biometricEventId.HasValue)
+                throw new DomainException("El ingreso biométrico requiere un evento asociado.");
 
+            var asistencia = new Asistencia(miembroId, asignacion.Id, fuente, biometricEventId);
             await _asistenciaRepository.RegistrarAsync(asistencia);
+
+            await _auditService.RegistrarAsync(
+                "Asistencia.Registrada",
+                "Asistencia",
+                asistencia.Id.ToString(),
+                $"Miembro {miembroId}, fuente {fuente}");
         }
     }
 }

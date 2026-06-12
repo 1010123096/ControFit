@@ -6,6 +6,7 @@ using ControlFit.Application.Servicios;
 using ControlFit.Domain;
 using ControlFit.Domain.Entidad;
 using ControlFit.Domain.Interfaz_puertos_;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -30,7 +31,10 @@ namespace ControlFit.Tests.Api
             var registrar = new RegistrarAdministrador(adminRepoMock.Object);
             var gymService = new GimnasioService(gymRepoMock.Object, userContextMock.Object);
 
-            var controller = new SeedController(registrar, gymService);
+            var envMock = new Mock<IWebHostEnvironment>();
+            envMock.Setup(x => x.EnvironmentName).Returns(Environments.Development);
+
+            var controller = new SeedController(registrar, gymService, envMock.Object);
             var result = await controller.Seed() as OkObjectResult;
 
             Assert.NotNull(result);
@@ -54,7 +58,10 @@ namespace ControlFit.Tests.Api
             var registrar = new RegistrarAdministrador(adminRepoMock.Object);
             var gymService = new GimnasioService(gymRepoMock.Object, userContextMock.Object);
 
-            var controller = new SeedController(registrar, gymService);
+            var envMock = new Mock<IWebHostEnvironment>();
+            envMock.Setup(x => x.EnvironmentName).Returns(Environments.Development);
+
+            var controller = new SeedController(registrar, gymService, envMock.Object);
             var result = await controller.Seed() as BadRequestObjectResult;
 
             Assert.NotNull(result);
